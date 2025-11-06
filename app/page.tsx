@@ -5,6 +5,20 @@ import { Volume2, Info, TrendingUp, X, Minus, Plus } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
+const getStimulusColor = (colorName: string) => {
+  const colorMap: Record<string, string> = {
+    red: "var(--stimulus-red)",
+    blue: "var(--stimulus-blue)",
+    green: "var(--stimulus-green)",
+    yellow: "var(--stimulus-yellow)",
+    purple: "var(--stimulus-purple)",
+    orange: "var(--stimulus-orange)",
+    pink: "var(--stimulus-pink)",
+    cyan: "var(--stimulus-cyan)",
+  }
+  return colorMap[colorName] || colorMap.blue
+}
+
 const DualNBack = () => {
   const [mounted, setMounted] = useState(false)
   const [gameState, setGameState] = useState("start") // start, playing, results
@@ -460,12 +474,12 @@ const DualNBack = () => {
     const todayStats = getTodayStats()
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-purple-900 text-white p-4 flex flex-col items-center justify-center">
-        <div className="max-w-md w-full bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-2xl relative">
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
+        <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl relative border-border border-0 border-none">
           {/* Info icon in top right */}
           <button
             onClick={() => setShowInstructionsPage(!showInstructionsPage)}
-            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition"
+            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-muted hover:bg-accent rounded-full transition text-muted-foreground"
           >
             {showInstructionsPage ? <X size={20} /> : <Info size={20} />}
           </button>
@@ -478,7 +492,7 @@ const DualNBack = () => {
               <div className="space-y-4 text-sm">
                 <div>
                   <h3 className="font-bold text-lg mb-2">Goal</h3>
-                  <p className="text-indigo-200">
+                  <p className="text-muted-foreground">
                     Remember stimuli from {nLevel} steps back. Compare what you see/hear now to what happened {nLevel}{" "}
                     trials ago.
                   </p>
@@ -486,7 +500,7 @@ const DualNBack = () => {
 
                 <div>
                   <h3 className="font-bold text-lg mb-2">Game Types</h3>
-                  <ul className="space-y-1 text-indigo-200">
+                  <ul className="space-y-1 text-muted-foreground">
                     <li>
                       <strong>Position:</strong> Watch squares light up on the grid
                     </li>
@@ -507,7 +521,7 @@ const DualNBack = () => {
 
                 <div>
                   <h3 className="font-bold text-lg mb-2">How to Respond</h3>
-                  <p className="text-indigo-200">
+                  <p className="text-muted-foreground">
                     Press the corresponding button when the current stimulus matches the one from {nLevel} trials ago.
                     You can press multiple buttons if multiple types match!
                   </p>
@@ -515,7 +529,7 @@ const DualNBack = () => {
 
                 <div>
                   <h3 className="font-bold text-lg mb-2">Progression</h3>
-                  <ul className="space-y-1 text-indigo-200">
+                  <ul className="space-y-1 text-muted-foreground">
                     <li>
                       Get <strong>85%+</strong> accuracy → Level up! 📈
                     </li>
@@ -530,7 +544,7 @@ const DualNBack = () => {
 
                 <div>
                   <h3 className="font-bold text-lg mb-2">Tips</h3>
-                  <ul className="space-y-1 text-indigo-200">
+                  <ul className="space-y-1 text-muted-foreground">
                     <li>Start with 1-2 types, then add more</li>
                     <li>Most people plateau at 3-4 back</li>
                     <li>Practice daily for best results</li>
@@ -544,8 +558,8 @@ const DualNBack = () => {
             <>
               <div className="flex items-center gap-3 mb-8 justify-start flex-col">
                 <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-28" />
-                <h1 className="font-bold bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent text-4xl">
-                  N-Back
+                <h1 className="font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl text-primary">
+                  {"Dual-N-Back"}
                 </h1>
               </div>
 
@@ -553,12 +567,12 @@ const DualNBack = () => {
               {todayStats && (
                 <button
                   onClick={() => setShowProgress(true)}
-                  className="w-full bg-green-500/20 border border-green-500/30 rounded-xl p-3 mb-4 hover:bg-green-500/30 transition text-left"
+                  className="w-full bg-accent/20 border border-accent/30 rounded-xl p-3 mb-4 hover:bg-accent/30 transition text-left"
                 >
                   <div className="flex items-center justify-between text-sm">
                     <div>
                       <div className="font-bold">Today's Progress</div>
-                      <div className="text-green-200">
+                      <div className="text-primary">
                         {todayStats.sessions} sessions · {todayStats.avgAccuracy}% avg · max {todayStats.maxLevel}-back
                       </div>
                     </div>
@@ -567,20 +581,20 @@ const DualNBack = () => {
                 </button>
               )}
 
-              <div className="bg-white/5 rounded-xl p-4 mb-4">
+              <div className="bg-muted rounded-xl p-4 mb-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold">Level</span>
+                  <span className="text-lg font-bold text-muted-foreground">Level</span>
                   <div className="flex gap-2 items-center">
                     <button
                       onClick={() => setNLevel(Math.max(1, nLevel - 1))}
-                      className="w-10 h-10 bg-white/10 hover:bg-white/20 transition rounded-full flex items-center justify-center"
+                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground"
                     >
                       <Minus size={20} />
                     </button>
-                    <span className="text-lg text-yellow-300 font-medium">{nLevel}-BACK</span>
+                    <span className="text-lg text-primary font-semibold">{nLevel}-Back</span>
                     <button
                       onClick={() => setNLevel(Math.min(maxNLevel, nLevel + 1))}
-                      className="w-10 h-10 bg-white/10 hover:bg-white/20 transition rounded-full flex items-center justify-center"
+                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground"
                     >
                       <Plus size={20} />
                     </button>
@@ -589,23 +603,23 @@ const DualNBack = () => {
               </div>
 
               {/* Type Selection as selectable cards */}
-              <div className="bg-white/5 rounded-xl p-4 mb-4">
-                <h3 className="text-lg mb-3 font-bold text-left">Type</h3>
+              <div className="bg-muted rounded-xl p-4 mb-4">
+                <h3 className="text-lg mb-3 font-bold text-left text-muted-foreground">Type</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {[
-                    { key: "audio", label: "Letters" },
                     { key: "position", label: "Position" },
                     { key: "color", label: "Color" },
                     { key: "shape", label: "Shape" },
+                    { key: "audio", label: "Letters" },
                     { key: "number", label: "Numbers" },
                   ].map(({ key, label }) => (
                     <button
                       key={key}
                       onClick={() => toggleType(key)}
-                      className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 rounded-full font-medium ${
+                      className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 rounded-full font-medium text-primary ${
                         enabledTypes[key]
-                          ? "bg-yellow-300 text-indigo-900 shadow-lg"
-                          : "bg-white/10 text-white hover:bg-white/20"
+                          ? "bg-primary text-primary-foreground shadow-lg"
+                          : "bg-secondary text-secondary-foreground hover:bg-accent"
                       }`}
                     >
                       {label}
@@ -617,13 +631,13 @@ const DualNBack = () => {
               <button
                 onClick={startGame}
                 disabled={enabledCount === 0}
-                className={`w-full py-4 font-bold text-xl shadow-lg transition transform rounded-full ${
+                className={`w-full py-4 text-xl shadow-lg transition transform rounded-full font-bold ${
                   enabledCount === 0
-                    ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-gradient-to-r from-green-500 to-emerald-600 hover:shadow-xl hover:scale-105"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
                 } mb-0`}
               >
-                START TRAINING
+                Start Training 
               </button>
             </>
           )}
@@ -635,19 +649,22 @@ const DualNBack = () => {
             className="fixed inset-0 bg-black/80 flex items-start justify-center z-50 p-4 overflow-y-auto"
             onClick={() => setShowProgress(false)}
           >
-            <div className="bg-indigo-900 rounded-2xl p-6 max-w-md w-full my-4" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="bg-card rounded-2xl p-6 max-w-md w-full my-4 border border-border"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">Your Progress</h2>
                 <button
                   onClick={() => setShowProgress(false)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-lg transition flex-shrink-0"
+                  className="w-10 h-10 flex items-center justify-center hover:bg-muted rounded-lg transition flex-shrink-0"
                 >
                   <X size={24} />
                 </button>
               </div>
 
               {dailyScores.length === 0 ? (
-                <p className="text-center text-indigo-300 py-8">
+                <p className="text-center text-muted-foreground py-8">
                   No sessions yet. Start training to track your progress!
                 </p>
               ) : (
@@ -656,27 +673,27 @@ const DualNBack = () => {
                     .slice()
                     .reverse()
                     .map((score, idx) => (
-                      <div key={idx} className="bg-white/5 rounded-lg p-3">
+                      <div key={idx} className="bg-muted rounded-lg p-3">
                         <div className="flex justify-between items-start mb-1">
                           <div className="font-bold">{new Date(score.timestamp).toLocaleDateString()}</div>
-                          <div className="text-sm text-indigo-200">
+                          <div className="text-sm text-muted-foreground">
                             {new Date(score.timestamp).toLocaleTimeString()}
                           </div>
                         </div>
                         <div className="flex items-center gap-4 text-sm">
-                          <span className="font-bold text-yellow-300">{score.nLevel}-BACK</span>
+                          <span className="font-bold text-primary">{score.nLevel}-BACK</span>
                           <span
                             className={
                               score.accuracy >= 85
-                                ? "text-green-300"
+                                ? "text-primary"
                                 : score.accuracy >= 70
-                                  ? "text-blue-300"
-                                  : "text-red-300"
+                                  ? "text-accent-foreground"
+                                  : "text-destructive-foreground"
                             }
                           >
                             {score.accuracy}%
                           </span>
-                          <span className="text-indigo-300">{score.types.join(", ")}</span>
+                          <span className="text-muted-foreground">{score.types.join(", ")}</span>
                         </div>
                       </div>
                     ))}
@@ -692,7 +709,7 @@ const DualNBack = () => {
                       setShowProgress(false)
                     }
                   }}
-                  className="w-full mt-4 py-2 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/30 transition"
+                  className="w-full mt-4 py-2 bg-destructive/20 text-destructive-foreground rounded-lg hover:bg-destructive/30 transition"
                 >
                   Clear All Data
                 </button>
@@ -709,19 +726,19 @@ const DualNBack = () => {
     const gridColor = currentColor || "blue"
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-purple-900 text-white p-4 flex flex-col pb-40">
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col pb-40">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <button
             onClick={exitGame}
-            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition flex items-center justify-center"
+            className="w-12 h-12 rounded-full bg-card backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border border-border"
           >
             <X size={24} />
           </button>
-          <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
-            <span className="font-bold text-yellow-300">{nLevel}-BACK</span>
+          <div className="bg-card px-4 py-2 rounded-lg backdrop-blur-sm border border-border">
+            <span className="font-bold text-primary">{nLevel}-BACK</span>
           </div>
-          <div className="bg-white/10 px-4 py-2 rounded-lg backdrop-blur-sm">
+          <div className="bg-card px-4 py-2 rounded-lg backdrop-blur-sm border border-border">
             <span className="font-mono">
               Trial {currentTrial + 1}/{totalTrials}
             </span>
@@ -736,55 +753,20 @@ const DualNBack = () => {
                 <div
                   key={pos}
                   className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative ${
-                    currentPosition === pos ? `shadow-2xl` : "bg-white/10 border-2 border-white/20"
+                    currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
                   }`}
                   style={{
                     aspectRatio: "1/1",
                     ...(currentPosition === pos
                       ? {
-                          backgroundColor:
-                            gridColor === "blue"
-                              ? "#3b82f6"
-                              : gridColor === "red"
-                                ? "#ef4444"
-                                : gridColor === "green"
-                                  ? "#10b981"
-                                  : gridColor === "yellow"
-                                    ? "#eab308"
-                                    : gridColor === "purple"
-                                      ? "#a855f7"
-                                      : gridColor === "orange"
-                                        ? "#f97316"
-                                        : gridColor === "pink"
-                                          ? "#ec4899"
-                                          : gridColor === "cyan"
-                                            ? "#06b6d4"
-                                            : "#3b82f6",
-                          boxShadow: `0 25px 50px -12px ${
-                            gridColor === "blue"
-                              ? "rgba(59, 130, 246, 0.5)"
-                              : gridColor === "red"
-                                ? "rgba(239, 68, 68, 0.5)"
-                                : gridColor === "green"
-                                  ? "rgba(16, 185, 129, 0.5)"
-                                  : gridColor === "yellow"
-                                    ? "rgba(234, 179, 8, 0.5)"
-                                    : gridColor === "purple"
-                                      ? "rgba(168, 85, 247, 0.5)"
-                                      : gridColor === "orange"
-                                        ? "rgba(249, 115, 22, 0.5)"
-                                        : gridColor === "pink"
-                                          ? "rgba(236, 72, 153, 0.5)"
-                                          : gridColor === "cyan"
-                                            ? "rgba(6, 182, 212, 0.5)"
-                                            : "rgba(59, 130, 246, 0.5)"
-                          }`,
+                          backgroundColor: getStimulusColor(gridColor),
+                          boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
                         }
                       : {}),
                   }}
                 >
                   {enabledTypes.shape && currentShape && currentPosition === pos && (
-                    <div className="text-white flex items-center justify-center absolute inset-0">
+                    <div className="text-foreground flex items-center justify-center absolute inset-0">
                       {renderShape(currentShape, 100)}
                     </div>
                   )}
@@ -802,7 +784,7 @@ const DualNBack = () => {
               {enabledTypes.audio && (
                 <div
                   className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                    currentSound ? "bg-purple-500 shadow-lg shadow-purple-500/50" : "bg-white/10"
+                    currentSound ? "bg-accent shadow-lg shadow-accent/50" : "bg-muted"
                   }`}
                 >
                   <Volume2 size={24} />
@@ -813,7 +795,7 @@ const DualNBack = () => {
               {enabledTypes.number && (
                 <div
                   className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                    currentNumber ? "bg-orange-500 shadow-lg shadow-orange-500/50" : "bg-white/10"
+                    currentNumber ? "bg-primary shadow-lg shadow-primary/50" : "bg-muted"
                   }`}
                 >
                   <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
@@ -827,29 +809,12 @@ const DualNBack = () => {
             <div className="text-center">
               <div
                 className={`inline-block w-24 h-24 rounded-xl transition-all ${
-                  currentColor ? "shadow-2xl" : "bg-white/10"
+                  currentColor ? "shadow-2xl" : "bg-muted"
                 }`}
                 style={
                   currentColor
                     ? {
-                        backgroundColor:
-                          currentColor === "red"
-                            ? "#ef4444"
-                            : currentColor === "blue"
-                              ? "#3b82f6"
-                              : currentColor === "green"
-                                ? "#10b981"
-                                : currentColor === "yellow"
-                                  ? "#eab308"
-                                  : currentColor === "purple"
-                                    ? "#a855f7"
-                                    : currentColor === "orange"
-                                      ? "#f97316"
-                                      : currentColor === "pink"
-                                        ? "#ec4899"
-                                        : currentColor === "cyan"
-                                          ? "#06b6d4"
-                                          : "transparent",
+                        backgroundColor: getStimulusColor(currentColor),
                       }
                     : {}
                 }
@@ -862,11 +827,11 @@ const DualNBack = () => {
             <div className="text-center">
               <div
                 className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
-                  currentShape ? "bg-white/20 shadow-lg" : "bg-white/10"
+                  currentShape ? "bg-accent shadow-lg" : "bg-muted"
                 }`}
               >
                 {currentShape && (
-                  <div className="text-white absolute inset-0 flex items-center justify-center">
+                  <div className="text-foreground absolute inset-0 flex items-center justify-center">
                     {renderShape(currentShape, 96)}
                   </div>
                 )}
@@ -876,7 +841,7 @@ const DualNBack = () => {
         </div>
 
         {/* Response buttons - fixed to bottom */}
-        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-indigo-900 via-indigo-900/95 to-transparent pt-6 pb-safe">
+        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe">
           <div
             className={`flex items-center px-4 pb-6 ${
               getEnabledCount() === 2 ? "justify-between" : "justify-center gap-4"
@@ -888,9 +853,9 @@ const DualNBack = () => {
                 className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                   responses.position
                     ? responseCorrectness.position
-                      ? "bg-green-500 shadow-xl shadow-green-500/50"
-                      : "bg-red-500 shadow-xl shadow-red-500/50"
-                    : "bg-white/20 hover:bg-white/30 shadow-lg"
+                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                    : "bg-card hover:bg-muted shadow-lg border border-border"
                 }`}
               >
                 {getEnabledCount() > 3 ? "Pos" : "Position"}
@@ -902,9 +867,9 @@ const DualNBack = () => {
                 className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                   responses.audio
                     ? responseCorrectness.audio
-                      ? "bg-green-500 shadow-xl shadow-green-500/50"
-                      : "bg-red-500 shadow-xl shadow-red-500/50"
-                    : "bg-white/20 hover:bg-white/30 shadow-lg"
+                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                    : "bg-card hover:bg-muted shadow-lg border border-border"
                 }`}
               >
                 {getEnabledCount() > 3 ? "Let" : "Letters"}
@@ -916,9 +881,9 @@ const DualNBack = () => {
                 className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                   responses.color
                     ? responseCorrectness.color
-                      ? "bg-green-500 shadow-xl shadow-green-500/50"
-                      : "bg-red-500 shadow-xl shadow-red-500/50"
-                    : "bg-white/20 hover:bg-white/30 shadow-lg"
+                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                    : "bg-card hover:bg-muted shadow-lg border border-border"
                 }`}
               >
                 {getEnabledCount() > 3 ? "Col" : "Color"}
@@ -930,9 +895,9 @@ const DualNBack = () => {
                 className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                   responses.shape
                     ? responseCorrectness.shape
-                      ? "bg-green-500 shadow-xl shadow-green-500/50"
-                      : "bg-red-500 shadow-xl shadow-red-500/50"
-                    : "bg-white/20 hover:bg-white/30 shadow-lg"
+                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                    : "bg-card hover:bg-muted shadow-lg border border-border"
                 }`}
               >
                 {getEnabledCount() > 3 ? "Shp" : "Shape"}
@@ -944,9 +909,9 @@ const DualNBack = () => {
                 className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                   responses.number
                     ? responseCorrectness.number
-                      ? "bg-green-500 shadow-xl shadow-green-500/50"
-                      : "bg-red-500 shadow-xl shadow-red-500/50"
-                    : "bg-white/20 hover:bg-white/30 shadow-lg"
+                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                    : "bg-card hover:bg-muted shadow-lg border border-border"
                 }`}
               >
                 {getEnabledCount() > 3 ? "Num" : "Numbers"}
@@ -966,14 +931,14 @@ const DualNBack = () => {
     const enabledTypesList = Object.keys(enabledTypes).filter((type) => enabledTypes[type])
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-indigo-900 to-purple-900 text-white p-4 flex flex-col items-center justify-center">
-        <div className="max-w-md w-full bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
+        <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-border">
           <h2 className="text-3xl font-bold text-center mb-6">Session Complete!</h2>
 
-          <div className="bg-white/5 rounded-xl p-4 mb-6">
+          <div className="bg-muted rounded-xl p-4 mb-6">
             <div className="text-center mb-4">
-              <div className="text-5xl font-bold text-yellow-300 mb-2">{Math.round(overallAccuracy)}%</div>
-              <div className="text-sm text-indigo-200">Overall Accuracy</div>
+              <div className="text-5xl font-bold text-primary mb-2">{Math.round(overallAccuracy)}%</div>
+              <div className="text-sm text-muted-foreground">Overall Accuracy</div>
             </div>
 
             {/* Individual type accuracies */}
@@ -982,9 +947,9 @@ const DualNBack = () => {
               style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
             >
               {enabledTypesList.map((type) => (
-                <div key={type} className="bg-white/5 rounded-lg p-3 text-center">
-                  <div className="text-2xl font-bold text-blue-300">{Math.round(accuracies[type])}%</div>
-                  <div className="text-xs text-indigo-200 capitalize">{type}</div>
+                <div key={type} className="bg-card rounded-lg p-3 text-center border border-border">
+                  <div className="text-2xl font-bold text-accent-foreground">{Math.round(accuracies[type])}%</div>
+                  <div className="text-xs text-muted-foreground capitalize">{type}</div>
                 </div>
               ))}
             </div>
@@ -996,18 +961,18 @@ const DualNBack = () => {
             >
               {enabledTypesList.map((type) => (
                 <div key={type} className="space-y-1">
-                  <div className="text-xs font-bold capitalize text-indigo-300 mb-2">{type}</div>
+                  <div className="text-xs font-bold capitalize text-muted-foreground mb-2">{type}</div>
                   <div className="flex justify-between">
                     <span>✓ Correct:</span>
-                    <span className="font-bold text-green-300">{scores[type].correct}</span>
+                    <span className="font-bold text-primary">{scores[type].correct}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>✗ Missed:</span>
-                    <span className="font-bold text-red-300">{scores[type].missed}</span>
+                    <span className="font-bold text-destructive-foreground">{scores[type].missed}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>⚠ False:</span>
-                    <span className="font-bold text-orange-300">{scores[type].false}</span>
+                    <span className="font-bold text-accent-foreground">{scores[type].false}</span>
                   </div>
                 </div>
               ))}
@@ -1017,10 +982,10 @@ const DualNBack = () => {
           <div
             className={`text-center py-4 rounded-xl mb-6 font-bold text-lg ${
               levelChange === "up"
-                ? "bg-green-500/20 text-green-300"
+                ? "bg-primary/20 text-primary"
                 : levelChange === "down"
-                  ? "bg-red-500/20 text-red-300"
-                  : "bg-blue-500/20 text-blue-300"
+                  ? "bg-destructive/20 text-destructive-foreground"
+                  : "bg-accent/20 text-accent-foreground"
             }`}
           >
             {levelChange === "up" && `🎉 Advancing to ${nextLevel}-BACK!`}
@@ -1030,14 +995,14 @@ const DualNBack = () => {
 
           <button
             onClick={continueTraining}
-            className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3"
+            className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3"
           >
             CONTINUE TRAINING
           </button>
 
           <button
             onClick={() => setGameState("start")}
-            className="w-full py-3 bg-white/10 rounded-xl hover:bg-white/20 transition"
+            className="w-full py-3 bg-muted rounded-xl hover:bg-accent transition"
           >
             Back to Menu
           </button>
