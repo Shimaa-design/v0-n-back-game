@@ -866,7 +866,7 @@ const DualNBack = () => {
 
           <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
-              className={`flex items-center px-4 pb-6 gap-2 md:gap-4 ${
+              className={`flex items-center px-4 pb-[44px] md:pb-6 gap-2 md:gap-4 ${
                 getEnabledCount() === 2 ? "justify-between" : "justify-center gap-0.5 md:gap-4"
               }`}
             >
