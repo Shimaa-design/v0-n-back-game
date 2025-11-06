@@ -190,7 +190,7 @@ const DualNBack = () => {
 
     const updated = [...dailyScores, newScore]
     setDailyScores(updated)
-    localStorage.setItem("nback-daily-scores", JSON.stringify(updated))
+    localStorage.setItem("nback-daily-scores", JSON.JSON.stringify(updated))
   }
 
   const getTodayStats = () => {
@@ -754,7 +754,10 @@ const DualNBack = () => {
   if (gameState === "playing") {
     const gridColor = currentColor || "blue"
     const enabledCount = getEnabledCount()
-    const maxButtonSize = enabledCount >= 5 ? "max-w-[75px]" : enabledCount >= 4 ? "max-w-[90px]" : "max-w-[120px]"
+    const buttonSizeClass =
+      enabledCount <= 2
+        ? "w-28 h-28 min-w-28 min-h-28"
+        : `flex-1 max-w-[75px] aspect-square md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28`
 
     return (
       <div className="max-w-[1000px] mx-auto">
@@ -766,7 +769,7 @@ const DualNBack = () => {
             >
               <X size={24} />
             </button>
-            <div className="px-4 py-2 backdrop-blur-sm border border-border border-none rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
+            <div className="px-4 py-2 backdrop-blur-sm border border-none border-0 rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
               <span className="font-bold">{nLevel}-BACK</span>
             </div>
             <div className="px-4 py-2 backdrop-blur-sm border border-border rounded-full border-none bg-muted text-muted-foreground">
@@ -870,7 +873,7 @@ const DualNBack = () => {
               {enabledTypes.position && (
                 <button
                   onClick={() => handleResponse("position")}
-                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.position
                       ? responseCorrectness.position
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -878,14 +881,20 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  <span className="md:hidden">📍</span>
-                  <span className="hidden md:inline">Position</span>
+                  {enabledCount <= 2 ? (
+                    <span>Position</span>
+                  ) : (
+                    <>
+                      <span className="md:hidden">📍</span>
+                      <span className="hidden md:inline">Position</span>
+                    </>
+                  )}
                 </button>
               )}
               {enabledTypes.audio && (
                 <button
                   onClick={() => handleResponse("audio")}
-                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.audio
                       ? responseCorrectness.audio
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -893,14 +902,20 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  <span className="md:hidden">🔤</span>
-                  <span className="hidden md:inline">Letters</span>
+                  {enabledCount <= 2 ? (
+                    <span>Letters</span>
+                  ) : (
+                    <>
+                      <span className="md:hidden">🔤</span>
+                      <span className="hidden md:inline">Letters</span>
+                    </>
+                  )}
                 </button>
               )}
               {enabledTypes.color && (
                 <button
                   onClick={() => handleResponse("color")}
-                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.color
                       ? responseCorrectness.color
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -908,14 +923,20 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  <span className="md:hidden">🎨</span>
-                  <span className="hidden md:inline">Color</span>
+                  {enabledCount <= 2 ? (
+                    <span>Color</span>
+                  ) : (
+                    <>
+                      <span className="md:hidden">🎨</span>
+                      <span className="hidden md:inline">Color</span>
+                    </>
+                  )}
                 </button>
               )}
               {enabledTypes.shape && (
                 <button
                   onClick={() => handleResponse("shape")}
-                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.shape
                       ? responseCorrectness.shape
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -923,14 +944,20 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  <span className="md:hidden">🔷</span>
-                  <span className="hidden md:inline">Shape</span>
+                  {enabledCount <= 2 ? (
+                    <span>Shape</span>
+                  ) : (
+                    <>
+                      <span className="md:hidden">🔷</span>
+                      <span className="hidden md:inline">Shape</span>
+                    </>
+                  )}
                 </button>
               )}
               {enabledTypes.number && (
                 <button
                   onClick={() => handleResponse("number")}
-                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.number
                       ? responseCorrectness.number
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -938,8 +965,14 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  <span className="md:hidden">🔢</span>
-                  <span className="hidden md:inline">Numbers</span>
+                  {enabledCount <= 2 ? (
+                    <span>Numbers</span>
+                  ) : (
+                    <>
+                      <span className="md:hidden">🔢</span>
+                      <span className="hidden md:inline">Numbers</span>
+                    </>
+                  )}
                 </button>
               )}
             </div>
