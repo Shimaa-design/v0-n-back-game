@@ -508,17 +508,17 @@ const DualNBack = () => {
 
     return (
       <div
-        className="max-w-[1000px] mx-auto relative"
+        className="max-w-[800px] mx-auto relative"
         style={{
           backgroundImage:
             "url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%205-lBLaYHvht88k2eMfa3ZgEywa7gUJDw.png')",
           backgroundPosition: "top center",
           backgroundRepeat: "no-repeat",
           backgroundSize: "200px",
-          paddingTop: "80px", // Reduced from 120px to 80px
+          paddingTop: "80px",
         }}
       >
-        <div className="min-h-screen p-4 flex flex-col items-center justify-start mt-24 ">
+        <div className="min-h-screen p-4 flex flex-col items-center justify-start mt-20 ">
           <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
             <button
               onClick={() => setShowInstructionsPage(!showInstructionsPage)}
@@ -623,7 +623,7 @@ const DualNBack = () => {
 
                 <div className="bg-muted rounded-xl p-4 mb-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-muted-foreground">Level</span>
+                    <span className="font-bold text-muted-foreground">Level</span>
                     <div className="flex gap-2 items-center">
                       <button
                         onClick={() => setNLevel(Math.max(1, nLevel - 1))}
@@ -631,7 +631,7 @@ const DualNBack = () => {
                       >
                         <Minus size={20} />
                       </button>
-                      <span className="text-lg text-primary font-semibold">{nLevel}-Back</span>
+                      <span className="text-primary font-bold">{nLevel}-Back</span>
                       <button
                         onClick={() => setNLevel(Math.min(maxNLevel, nLevel + 1))}
                         className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
@@ -643,7 +643,7 @@ const DualNBack = () => {
                 </div>
 
                 <div className="bg-muted rounded-xl p-4 mb-4">
-                  <h3 className="text-lg mb-3 font-bold text-left text-muted-foreground">Type</h3>
+                  <h3 className="mb-3 font-bold text-left text-muted-foreground">Type</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                     {[
                       { key: "position", label: "Position" },
@@ -655,7 +655,7 @@ const DualNBack = () => {
                       <button
                         key={key}
                         onClick={() => toggleType(key)}
-                        className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 font-medium text-primary shadow-sm rounded-lg ${
+                        className={`transition-all transform active:scale-95 px-2 py-1.5 text-primary shadow-sm rounded-lg font-normal ${
                           enabledTypes[key]
                             ? "bg-primary text-primary-foreground shadow-lg"
                             : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -669,9 +669,9 @@ const DualNBack = () => {
 
                 <button
                   onClick={startGame}
-                  disabled={enabledCount === 0}
-                  className={`w-full text-xl transition transform font-bold shadow-none rounded-xl py-3 ${
-                    enabledCount === 0
+                  disabled={getEnabledCount() === 0}
+                  className={`w-full transition transform font-bold shadow-none rounded-xl py-3 text-lg ${
+                    getEnabledCount() === 0
                       ? "bg-muted text-muted-foreground cursor-not-allowed"
                       : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
                   } mb-0`}
@@ -769,221 +769,223 @@ const DualNBack = () => {
         : `flex-1 max-w-[85px] aspect-square md:flex-none md:w-32 md:h-32 md:min-w-32 md:min-h-32`
 
     return (
-      <div className="max-w-[1000px] mx-auto">
-        <div className="min-h-screen text-foreground p-4 flex flex-col pb-40 bg-card">
-          <div className="flex justify-between items-center mb-4 relative">
-            <button
-              onClick={exitGame}
-              className="w-12 h-12 rounded-full backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border-none border-0 bg-secondary text-secondary-foreground"
-            >
-              <X size={24} />
-            </button>
-            <div className="px-4 py-2 backdrop-blur-sm border border-none border-0 rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
-              <span className="font-bold">{nLevel}-BACK</span>
+      <div className="min-h-screen bg-card">
+        <div className="max-w-[800px] mx-auto">
+          <div className="min-h-screen text-foreground p-4 flex flex-col pb-40">
+            <div className="flex justify-between items-center mb-4 relative">
+              <button
+                onClick={exitGame}
+                className="w-12 h-12 rounded-full backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border-none border-0 bg-secondary text-secondary-foreground"
+              >
+                <X size={24} />
+              </button>
+              <div className="px-4 py-2 backdrop-blur-sm border border-none border-0 rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
+                <span className="font-bold">{nLevel}-BACK</span>
+              </div>
+              <div className="px-4 py-2 backdrop-blur-sm border border-border rounded-full border-none bg-muted text-muted-foreground">
+                <span className="font-medium">
+                  Trial {currentTrial + 1}/{totalTrials}
+                </span>
+              </div>
             </div>
-            <div className="px-4 py-2 backdrop-blur-sm border border-border rounded-full border-none bg-muted text-muted-foreground">
-              <span className="font-medium">
-                Trial {currentTrial + 1}/{totalTrials}
-              </span>
-            </div>
-          </div>
 
-          <div className={`flex-1 ${enabledCount <= 3 ? "flex items-center justify-center" : ""}`}>
-            <div className="w-full">
-              {enabledTypes.position && (
-                <div className="flex-1 flex items-center justify-center mb-4">
-                  <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
-                      <div
-                        key={pos}
-                        className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
-                          currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
-                        }`}
-                        style={{
-                          aspectRatio: "1/1",
-                          ...(currentPosition === pos
-                            ? {
-                                backgroundColor: getStimulusColor(gridColor),
-                                boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
-                              }
-                            : {}),
-                        }}
-                      >
-                        {enabledTypes.shape && currentShape && currentPosition === pos && (
-                          <div className="text-primary-foreground flex items-center justify-center absolute inset-0">
-                            {renderShape(currentShape, 100)}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="space-y-3 mb-6">
-                {(enabledTypes.audio || enabledTypes.number) && (
-                  <div className="flex justify-center items-center gap-7">
-                    {enabledTypes.audio && (
-                      <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
-                        <span className="font-bold font-mono text-3xl">{currentSound || "-"}</span>
-                      </div>
-                    )}
-
-                    {enabledTypes.number && (
-                      <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
-                        <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {enabledTypes.color && !enabledTypes.position && (
-                  <div className="text-center">
-                    <div
-                      className={`inline-block w-24 h-24 rounded-xl transition-all ${
-                        currentColor ? "shadow-2xl" : "bg-muted"
-                      }`}
-                      style={
-                        currentColor
-                          ? {
-                              backgroundColor: getStimulusColor(currentColor),
-                            }
-                          : {}
-                      }
-                    />
-                  </div>
-                )}
-
-                {enabledTypes.shape && !enabledTypes.position && (
-                  <div className="text-center">
-                    <div
-                      className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
-                        currentShape ? "bg-accent shadow-lg" : "bg-muted"
-                      }`}
-                    >
-                      {currentShape && (
-                        <div className="text-foreground absolute inset-0 flex items-center justify-center">
-                          {renderShape(currentShape, 96)}
+            <div className={`flex-1 ${enabledCount <= 3 ? "flex items-center justify-center" : ""}`}>
+              <div className="w-full">
+                {enabledTypes.position && (
+                  <div className="flex-1 flex items-center justify-center mb-4">
+                    <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
+                        <div
+                          key={pos}
+                          className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
+                            currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
+                          }`}
+                          style={{
+                            aspectRatio: "1/1",
+                            ...(currentPosition === pos
+                              ? {
+                                  backgroundColor: getStimulusColor(gridColor),
+                                  boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
+                                }
+                              : {}),
+                          }}
+                        >
+                          {enabledTypes.shape && currentShape && currentPosition === pos && (
+                            <div className="text-primary-foreground flex items-center justify-center absolute inset-0">
+                              {renderShape(currentShape, 100)}
+                            </div>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
                   </div>
                 )}
+
+                <div className="space-y-3 mb-6">
+                  {(enabledTypes.audio || enabledTypes.number) && (
+                    <div className="flex justify-center items-center gap-7">
+                      {enabledTypes.audio && (
+                        <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
+                          <span className="font-bold font-mono text-3xl">{currentSound || "-"}</span>
+                        </div>
+                      )}
+
+                      {enabledTypes.number && (
+                        <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
+                          <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {enabledTypes.color && !enabledTypes.position && (
+                    <div className="text-center">
+                      <div
+                        className={`inline-block w-24 h-24 rounded-xl transition-all ${
+                          currentColor ? "shadow-2xl" : "bg-muted"
+                        }`}
+                        style={
+                          currentColor
+                            ? {
+                                backgroundColor: getStimulusColor(currentColor),
+                              }
+                            : {}
+                        }
+                      />
+                    </div>
+                  )}
+
+                  {enabledTypes.shape && !enabledTypes.position && (
+                    <div className="text-center">
+                      <div
+                        className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
+                          currentShape ? "bg-accent shadow-lg" : "bg-muted"
+                        }`}
+                      >
+                        {currentShape && (
+                          <div className="text-foreground absolute inset-0 flex items-center justify-center">
+                            {renderShape(currentShape, 96)}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
-            <div
-              className={`flex items-center px-4 pb-[44px] md:pb-6 gap-2 md:gap-4 ${
-                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-0.5 md:gap-4"
-              }`}
-            >
-              {enabledTypes.position && (
-                <button
-                  onClick={() => handleResponse("position")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                    responses.position
-                      ? responseCorrectness.position
-                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
-                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                      : "bg-card hover:bg-muted shadow-lg border border-border"
-                  }`}
-                >
-                  {enabledCount <= 3 ? (
-                    <span>Position</span>
-                  ) : (
-                    <>
-                      <span className="md:hidden">📍</span>
-                      <span className="hidden md:inline">Position</span>
-                    </>
-                  )}
-                </button>
-              )}
-              {enabledTypes.audio && (
-                <button
-                  onClick={() => handleResponse("audio")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                    responses.audio
-                      ? responseCorrectness.audio
-                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
-                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                      : "bg-card hover:bg-muted shadow-lg border border-border"
-                  }`}
-                >
-                  {enabledCount <= 3 ? (
-                    <span>Letters</span>
-                  ) : (
-                    <>
-                      <span className="md:hidden">🔤</span>
-                      <span className="hidden md:inline">Letters</span>
-                    </>
-                  )}
-                </button>
-              )}
-              {enabledTypes.color && (
-                <button
-                  onClick={() => handleResponse("color")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                    responses.color
-                      ? responseCorrectness.color
-                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
-                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                      : "bg-card hover:bg-muted shadow-lg border border-border"
-                  }`}
-                >
-                  {enabledCount <= 3 ? (
-                    <span>Color</span>
-                  ) : (
-                    <>
-                      <span className="md:hidden">🎨</span>
-                      <span className="hidden md:inline">Color</span>
-                    </>
-                  )}
-                </button>
-              )}
-              {enabledTypes.shape && (
-                <button
-                  onClick={() => handleResponse("shape")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                    responses.shape
-                      ? responseCorrectness.shape
-                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
-                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                      : "bg-card hover:bg-muted shadow-lg border border-border"
-                  }`}
-                >
-                  {enabledCount <= 3 ? (
-                    <span>Shape</span>
-                  ) : (
-                    <>
-                      <span className="md:hidden">🔷</span>
-                      <span className="hidden md:inline">Shape</span>
-                    </>
-                  )}
-                </button>
-              )}
-              {enabledTypes.number && (
-                <button
-                  onClick={() => handleResponse("number")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                    responses.number
-                      ? responseCorrectness.number
-                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
-                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                      : "bg-card hover:bg-muted shadow-lg border border-border"
-                  }`}
-                >
-                  {enabledCount <= 3 ? (
-                    <span>Numbers</span>
-                  ) : (
-                    <>
-                      <span className="md:hidden">🔢</span>
-                      <span className="hidden md:inline">Numbers</span>
-                    </>
-                  )}
-                </button>
-              )}
+            <div className="fixed bottom-0 left-0 right-0 pt-6 pb-safe max-w-[800px] mx-auto">
+              <div
+                className={`flex items-center px-4 pb-[44px] md:pb-6 gap-2 md:gap-4 ${
+                  getEnabledCount() === 2 ? "justify-between" : "justify-center gap-0.5 md:gap-4"
+                }`}
+              >
+                {enabledTypes.position && (
+                  <button
+                    onClick={() => handleResponse("position")}
+                    className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                      responses.position
+                        ? responseCorrectness.position
+                          ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
+                          : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                        : "bg-card hover:bg-muted shadow-lg border border-border"
+                    }`}
+                  >
+                    {enabledCount <= 3 ? (
+                      <span>Position</span>
+                    ) : (
+                      <>
+                        <span className="md:hidden">📍</span>
+                        <span className="hidden md:inline">Position</span>
+                      </>
+                    )}
+                  </button>
+                )}
+                {enabledTypes.audio && (
+                  <button
+                    onClick={() => handleResponse("audio")}
+                    className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                      responses.audio
+                        ? responseCorrectness.audio
+                          ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
+                          : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                        : "bg-card hover:bg-muted shadow-lg border border-border"
+                    }`}
+                  >
+                    {enabledCount <= 3 ? (
+                      <span>Letters</span>
+                    ) : (
+                      <>
+                        <span className="md:hidden">🔤</span>
+                        <span className="hidden md:inline">Letters</span>
+                      </>
+                    )}
+                  </button>
+                )}
+                {enabledTypes.color && (
+                  <button
+                    onClick={() => handleResponse("color")}
+                    className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                      responses.color
+                        ? responseCorrectness.color
+                          ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
+                          : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                        : "bg-card hover:bg-muted shadow-lg border border-border"
+                    }`}
+                  >
+                    {enabledCount <= 3 ? (
+                      <span>Color</span>
+                    ) : (
+                      <>
+                        <span className="md:hidden">🎨</span>
+                        <span className="hidden md:inline">Color</span>
+                      </>
+                    )}
+                  </button>
+                )}
+                {enabledTypes.shape && (
+                  <button
+                    onClick={() => handleResponse("shape")}
+                    className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                      responses.shape
+                        ? responseCorrectness.shape
+                          ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
+                          : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                        : "bg-card hover:bg-muted shadow-lg border border-border"
+                    }`}
+                  >
+                    {enabledCount <= 3 ? (
+                      <span>Shape</span>
+                    ) : (
+                      <>
+                        <span className="md:hidden">🔷</span>
+                        <span className="hidden md:inline">Shape</span>
+                      </>
+                    )}
+                  </button>
+                )}
+                {enabledTypes.number && (
+                  <button
+                    onClick={() => handleResponse("number")}
+                    className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                      responses.number
+                        ? responseCorrectness.number
+                          ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
+                          : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                        : "bg-card hover:bg-muted shadow-lg border border-border"
+                    }`}
+                  >
+                    {enabledCount <= 3 ? (
+                      <span>Numbers</span>
+                    ) : (
+                      <>
+                        <span className="md:hidden">🔢</span>
+                        <span className="hidden md:inline">Numbers</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -998,10 +1000,10 @@ const DualNBack = () => {
     const enabledTypesList = Object.keys(enabledTypes).filter((type) => enabledTypes[type])
 
     return (
-      <div className="max-w-[1000px] mx-auto">
-        <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
+      <div className="max-w-[800px] mx-auto">
+        <div className="min-h-screen text-foreground p-4 flex flex-col items-center justify-center">
           <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-border">
-            <h2 className="font-bold text-center mb-6 text-2xl">Session Complete!</h2>
+            <h2 className="font-bold text-center mb-6 text-2xl">{"👏🏽 Amazing Job 👏🏽"} </h2>
 
             <div className="bg-muted rounded-xl p-4 mb-3">
               <div className="text-center mb-4">
@@ -1055,14 +1057,14 @@ const DualNBack = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => setGameState("start")}
-                className="flex-1 py-3 bg-muted rounded-xl hover:shadow-xl transition transform hover:scale-105"
+                className="flex-1 py-3 bg-muted rounded-xl hover:shadow-xl transition transform hover:scale-105 font-bold"
               >
                 Back to Menu
               </button>
 
               <button
                 onClick={continueTraining}
-                className="flex-1 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 font-bold text-lg py-3"
+                className="flex-1 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 font-bold py-3"
               >
                 {"Next Training"}
               </button>
