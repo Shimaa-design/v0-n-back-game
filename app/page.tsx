@@ -474,249 +474,252 @@ const DualNBack = () => {
     const todayStats = getTodayStats()
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex flex-col items-center justify-center text-foreground bg-primary">
-        <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
-          {/* Info icon in top right */}
-          <button
-            onClick={() => setShowInstructionsPage(!showInstructionsPage)}
-            className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-muted hover:bg-accent rounded-full transition text-muted-foreground"
-          >
-            {showInstructionsPage ? <X size={20} /> : <Info size={20} />}
-          </button>
-
-          {showInstructionsPage ? (
-            // Instructions Page
-            <div className="py-8">
-              <h2 className="text-2xl font-bold mb-6 text-center">How to Play</h2>
-
-              <div className="space-y-4 text-sm">
-                <div>
-                  <h3 className="font-bold text-lg mb-2">Goal</h3>
-                  <p className="text-muted-foreground">
-                    Remember stimuli from {nLevel} steps back. Compare what you see/hear now to what happened {nLevel}{" "}
-                    trials ago.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-2">Game Types</h3>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>
-                      <strong>Position:</strong> Watch squares light up on the grid
-                    </li>
-                    <li>
-                      <strong>Letters:</strong> Listen to letters being spoken
-                    </li>
-                    <li>
-                      <strong>Color:</strong> Remember the color of squares
-                    </li>
-                    <li>
-                      <strong>Shape:</strong> Track shapes appearing in squares
-                    </li>
-                    <li>
-                      <strong>Numbers:</strong> Listen to numbers being spoken
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-2">How to Respond</h3>
-                  <p className="text-muted-foreground">
-                    Press the corresponding button when the current stimulus matches the one from {nLevel} trials ago.
-                    You can press multiple buttons if multiple types match!
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-2">Progression</h3>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>
-                      Get <strong>85%+</strong> accuracy → Level up! 📈
-                    </li>
-                    <li>
-                      Get <strong>below 70%</strong> → Level down 📉
-                    </li>
-                    <li>
-                      Between <strong>70-84%</strong> → Stay at current level
-                    </li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-lg mb-2">Tips</h3>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>Start with 1-2 types, then add more</li>
-                    <li>Most people plateau at 3-4 back</li>
-                    <li>Practice daily for best results</li>
-                    <li>It should feel challenging!</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ) : (
-            // Main Menu Content
-            <>
-              <div className="flex items-center gap-3 mb-8 justify-start flex-col">
-                <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-28" />
-                <h1 className="font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl text-primary">
-                  {"Dual-N-Back"}
-                </h1>
-              </div>
-
-              {/* Today's Stats */}
-              {todayStats && (
-                <button
-                  onClick={() => setShowProgress(true)}
-                  className="w-full bg-accent/20 border border-accent/30 rounded-xl p-3 mb-4 hover:bg-accent/30 transition text-left"
-                >
-                  <div className="flex items-center justify-between text-sm">
-                    <div>
-                      <div className="font-bold">Today's Progress</div>
-                      <div className="text-primary">
-                        {todayStats.sessions} sessions · {todayStats.avgAccuracy}% avg · max {todayStats.maxLevel}-back
-                      </div>
-                    </div>
-                    <TrendingUp size={20} />
-                  </div>
-                </button>
-              )}
-
-              <div className="bg-muted rounded-xl p-4 mb-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-muted-foreground">Level</span>
-                  <div className="flex gap-2 items-center">
-                    <button
-                      onClick={() => setNLevel(Math.max(1, nLevel - 1))}
-                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
-                    >
-                      <Minus size={20} />
-                    </button>
-                    <span className="text-lg text-primary font-semibold">{nLevel}-Back</span>
-                    <button
-                      onClick={() => setNLevel(Math.min(maxNLevel, nLevel + 1))}
-                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
-                    >
-                      <Plus size={20} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Type Selection as selectable cards */}
-              <div className="bg-muted rounded-xl p-4 mb-4">
-                <h3 className="text-lg mb-3 font-bold text-left text-muted-foreground">Type</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {[
-                    { key: "position", label: "Position" },
-                    { key: "color", label: "Color" },
-                    { key: "shape", label: "Shape" },
-                    { key: "audio", label: "Letters" },
-                    { key: "number", label: "Numbers" },
-                  ].map(({ key, label }) => (
-                    <button
-                      key={key}
-                      onClick={() => toggleType(key)}
-                      className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 rounded-full font-medium text-primary shadow-sm ${
-                        enabledTypes[key]
-                          ? "bg-primary text-primary-foreground shadow-lg"
-                          : "bg-secondary text-secondary-foreground hover:bg-accent"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={startGame}
-                disabled={enabledCount === 0}
-                className={`w-full py-4 text-xl transition transform rounded-full font-bold shadow-none ${
-                  enabledCount === 0
-                    ? "bg-muted text-muted-foreground cursor-not-allowed"
-                    : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
-                } mb-0`}
-              >
-                Start Training
-              </button>
-            </>
-          )}
-        </div>
-
-        {/* Progress Modal */}
-        {showProgress && (
-          <div
-            className="fixed inset-0 bg-black/80 flex items-start justify-center z-50 p-4 overflow-y-auto"
-            onClick={() => setShowProgress(false)}
-          >
-            <div
-              className="bg-card rounded-2xl p-6 max-w-md w-full my-4 border border-border"
-              onClick={(e) => e.stopPropagation()}
+      <div className="max-w-[1000px] mx-auto">
+        <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex flex-col items-center justify-center text-foreground bg-primary">
+          <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
+            {/* Info icon in top right */}
+            <button
+              onClick={() => setShowInstructionsPage(!showInstructionsPage)}
+              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-muted hover:bg-accent rounded-full transition text-muted-foreground"
             >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Your Progress</h2>
-                <button
-                  onClick={() => setShowProgress(false)}
-                  className="w-10 h-10 flex items-center justify-center hover:bg-muted rounded-lg transition flex-shrink-0"
-                >
-                  <X size={24} />
-                </button>
-              </div>
+              {showInstructionsPage ? <X size={20} /> : <Info size={20} />}
+            </button>
 
-              {dailyScores.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  No sessions yet. Start training to track your progress!
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  {dailyScores
-                    .slice()
-                    .reverse()
-                    .map((score, idx) => (
-                      <div key={idx} className="bg-muted rounded-lg p-3">
-                        <div className="flex justify-between items-start mb-1">
-                          <div className="font-bold">{new Date(score.timestamp).toLocaleDateString()}</div>
-                          <div className="text-sm text-muted-foreground">
-                            {new Date(score.timestamp).toLocaleTimeString()}
+            {showInstructionsPage ? (
+              // Instructions Page
+              <div className="py-8">
+                <h2 className="text-2xl font-bold mb-6 text-center">How to Play</h2>
+
+                <div className="space-y-4 text-sm">
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">Goal</h3>
+                    <p className="text-muted-foreground">
+                      Remember stimuli from {nLevel} steps back. Compare what you see/hear now to what happened {nLevel}{" "}
+                      trials ago.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">Game Types</h3>
+                    <ul className="space-y-1 text-muted-foreground">
+                      <li>
+                        <strong>Position:</strong> Watch squares light up on the grid
+                      </li>
+                      <li>
+                        <strong>Letters:</strong> Listen to letters being spoken
+                      </li>
+                      <li>
+                        <strong>Color:</strong> Remember the color of squares
+                      </li>
+                      <li>
+                        <strong>Shape:</strong> Track shapes appearing in squares
+                      </li>
+                      <li>
+                        <strong>Numbers:</strong> Listen to numbers being spoken
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">How to Respond</h3>
+                    <p className="text-muted-foreground">
+                      Press the corresponding button when the current stimulus matches the one from {nLevel} trials ago.
+                      You can press multiple buttons if multiple types match!
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">Progression</h3>
+                    <ul className="space-y-1 text-muted-foreground">
+                      <li>
+                        Get <strong>85%+</strong> accuracy → Level up! 📈
+                      </li>
+                      <li>
+                        Get <strong>below 70%</strong> → Level down 📉
+                      </li>
+                      <li>
+                        Between <strong>70-84%</strong> → Stay at current level
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">Tips</h3>
+                    <ul className="space-y-1 text-muted-foreground">
+                      <li>Start with 1-2 types, then add more</li>
+                      <li>Most people plateau at 3-4 back</li>
+                      <li>Practice daily for best results</li>
+                      <li>It should feel challenging!</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // Main Menu Content
+              <>
+                <div className="flex items-center gap-3 mb-8 justify-start flex-col">
+                  <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-28" />
+                  <h1 className="font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl text-primary">
+                    {"Dual-N-Back"}
+                  </h1>
+                </div>
+
+                {/* Today's Stats */}
+                {todayStats && (
+                  <button
+                    onClick={() => setShowProgress(true)}
+                    className="w-full bg-accent/20 border border-accent/30 rounded-xl p-3 mb-4 hover:bg-accent/30 transition text-left"
+                  >
+                    <div className="flex items-center justify-between text-sm">
+                      <div>
+                        <div className="font-bold">Today's Progress</div>
+                        <div className="text-primary">
+                          {todayStats.sessions} sessions · {todayStats.avgAccuracy}% avg · max {todayStats.maxLevel}
+                          -back
+                        </div>
+                      </div>
+                      <TrendingUp size={20} />
+                    </div>
+                  </button>
+                )}
+
+                <div className="bg-muted rounded-xl p-4 mb-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-muted-foreground">Level</span>
+                    <div className="flex gap-2 items-center">
+                      <button
+                        onClick={() => setNLevel(Math.max(1, nLevel - 1))}
+                        className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
+                      >
+                        <Minus size={20} />
+                      </button>
+                      <span className="text-lg text-primary font-semibold">{nLevel}-Back</span>
+                      <button
+                        onClick={() => setNLevel(Math.min(maxNLevel, nLevel + 1))}
+                        className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
+                      >
+                        <Plus size={20} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Type Selection as selectable cards */}
+                <div className="bg-muted rounded-xl p-4 mb-4">
+                  <h3 className="text-lg mb-3 font-bold text-left text-muted-foreground">Type</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {[
+                      { key: "position", label: "Position" },
+                      { key: "color", label: "Color" },
+                      { key: "shape", label: "Shape" },
+                      { key: "audio", label: "Letters" },
+                      { key: "number", label: "Numbers" },
+                    ].map(({ key, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => toggleType(key)}
+                        className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 font-medium text-primary shadow-sm rounded-lg ${
+                          enabledTypes[key]
+                            ? "bg-primary text-primary-foreground shadow-lg"
+                            : "bg-secondary text-secondary-foreground hover:bg-accent"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  onClick={startGame}
+                  disabled={enabledCount === 0}
+                  className={`w-full py-4 text-xl transition transform rounded-full font-bold shadow-none ${
+                    enabledCount === 0
+                      ? "bg-muted text-muted-foreground cursor-not-allowed"
+                      : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
+                  } mb-0`}
+                >
+                  Start Training
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Progress Modal */}
+          {showProgress && (
+            <div
+              className="fixed inset-0 bg-black/80 flex items-start justify-center z-50 p-4 overflow-y-auto"
+              onClick={() => setShowProgress(false)}
+            >
+              <div
+                className="bg-card rounded-2xl p-6 max-w-md w-full my-4 border border-border"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold">Your Progress</h2>
+                  <button
+                    onClick={() => setShowProgress(false)}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-muted rounded-lg transition flex-shrink-0"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                {dailyScores.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">
+                    No sessions yet. Start training to track your progress!
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {dailyScores
+                      .slice()
+                      .reverse()
+                      .map((score, idx) => (
+                        <div key={idx} className="bg-muted rounded-lg p-3">
+                          <div className="flex justify-between items-start mb-1">
+                            <div className="font-bold">{new Date(score.timestamp).toLocaleDateString()}</div>
+                            <div className="text-sm text-muted-foreground">
+                              {new Date(score.timestamp).toLocaleTimeString()}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="font-bold text-primary">{score.nLevel}-BACK</span>
+                            <span
+                              className={
+                                score.accuracy >= 85
+                                  ? "text-primary"
+                                  : score.accuracy >= 70
+                                    ? "text-accent-foreground"
+                                    : "text-destructive-foreground"
+                              }
+                            >
+                              {score.accuracy}%
+                            </span>
+                            <span className="text-muted-foreground">{score.types.join(", ")}</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4 text-sm">
-                          <span className="font-bold text-primary">{score.nLevel}-BACK</span>
-                          <span
-                            className={
-                              score.accuracy >= 85
-                                ? "text-primary"
-                                : score.accuracy >= 70
-                                  ? "text-accent-foreground"
-                                  : "text-destructive-foreground"
-                            }
-                          >
-                            {score.accuracy}%
-                          </span>
-                          <span className="text-muted-foreground">{score.types.join(", ")}</span>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              )}
+                      ))}
+                  </div>
+                )}
 
-              {dailyScores.length > 0 && (
-                <button
-                  onClick={() => {
-                    if (window.confirm("Clear all progress data?")) {
-                      localStorage.removeItem("nback-daily-scores")
-                      setDailyScores([])
-                      setShowProgress(false)
-                    }
-                  }}
-                  className="w-full mt-4 py-2 bg-destructive/20 text-destructive-foreground rounded-lg hover:bg-destructive/30 transition"
-                >
-                  Clear All Data
-                </button>
-              )}
+                {dailyScores.length > 0 && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm("Clear all progress data?")) {
+                        localStorage.removeItem("nback-daily-scores")
+                        setDailyScores([])
+                        setShowProgress(false)
+                      }
+                    }}
+                    className="w-full mt-4 py-2 bg-destructive/20 text-destructive-foreground rounded-lg hover:bg-destructive/30 transition"
+                  >
+                    Clear All Data
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     )
   }
@@ -726,197 +729,199 @@ const DualNBack = () => {
     const gridColor = currentColor || "blue"
 
     return (
-      <div className="min-h-screen text-foreground p-4 flex flex-col pb-40 bg-card">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4 relative">
-          <button
-            onClick={exitGame}
-            className="w-12 h-12 rounded-full backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border-none border-0 bg-secondary text-secondary-foreground"
-          >
-            <X size={24} />
-          </button>
-          <div className="px-4 py-2 backdrop-blur-sm border border-border border-none rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
-            <span className="font-bold">{nLevel}-BACK</span>
-          </div>
-          <div className="px-4 py-2 backdrop-blur-sm border border-border rounded-full border-none bg-muted text-muted-foreground">
-            <span className="font-medium">
-              Trial {currentTrial + 1}/{totalTrials}
-            </span>
-          </div>
-        </div>
-
-        {/* Grid - only show if position enabled */}
-        {enabledTypes.position && (
-          <div className="flex-1 flex items-center justify-center mb-4">
-            <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
-                <div
-                  key={pos}
-                  className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
-                    currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
-                  }`}
-                  style={{
-                    aspectRatio: "1/1",
-                    ...(currentPosition === pos
-                      ? {
-                          backgroundColor: getStimulusColor(gridColor),
-                          boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
-                        }
-                      : {}),
-                  }}
-                >
-                  {enabledTypes.shape && currentShape && currentPosition === pos && (
-                    <div className="text-foreground flex items-center justify-center absolute inset-0">
-                      {renderShape(currentShape, 100)}
-                    </div>
-                  )}
-                </div>
-              ))}
+      <div className="max-w-[1000px] mx-auto">
+        <div className="min-h-screen text-foreground p-4 flex flex-col pb-40 bg-card">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-4 relative">
+            <button
+              onClick={exitGame}
+              className="w-12 h-12 rounded-full backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border-none border-0 bg-secondary text-secondary-foreground"
+            >
+              <X size={24} />
+            </button>
+            <div className="px-4 py-2 backdrop-blur-sm border border-border border-none rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
+              <span className="font-bold">{nLevel}-BACK</span>
+            </div>
+            <div className="px-4 py-2 backdrop-blur-sm border border-border rounded-full border-none bg-muted text-muted-foreground">
+              <span className="font-medium">
+                Trial {currentTrial + 1}/{totalTrials}
+              </span>
             </div>
           </div>
-        )}
 
-        {/* Stimulus indicators */}
-        <div className="space-y-3 mb-6">
-          {/* Letters and Numbers combined in one row */}
-          {(enabledTypes.audio || enabledTypes.number) && (
-            <div className="flex justify-center items-center gap-4">
-              {enabledTypes.audio && (
-                <div
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                    currentSound ? "bg-accent shadow-lg shadow-accent/50" : "bg-muted"
-                  }`}
-                >
-                  <Volume2 size={24} />
-                  <span className="text-2xl font-bold font-mono">{currentSound || "---"}</span>
-                </div>
-              )}
-
-              {enabledTypes.number && (
-                <div
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                    currentNumber ? "bg-primary shadow-lg shadow-primary/50" : "bg-muted"
-                  }`}
-                >
-                  <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Color indicator - only if no grid */}
-          {enabledTypes.color && !enabledTypes.position && (
-            <div className="text-center">
-              <div
-                className={`inline-block w-24 h-24 rounded-xl transition-all ${
-                  currentColor ? "shadow-2xl" : "bg-muted"
-                }`}
-                style={
-                  currentColor
-                    ? {
-                        backgroundColor: getStimulusColor(currentColor),
-                      }
-                    : {}
-                }
-              />
-            </div>
-          )}
-
-          {/* Shape indicator - only if no grid */}
-          {enabledTypes.shape && !enabledTypes.position && (
-            <div className="text-center">
-              <div
-                className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
-                  currentShape ? "bg-accent shadow-lg" : "bg-muted"
-                }`}
-              >
-                {currentShape && (
-                  <div className="text-foreground absolute inset-0 flex items-center justify-center">
-                    {renderShape(currentShape, 96)}
+          {/* Grid - only show if position enabled */}
+          {enabledTypes.position && (
+            <div className="flex-1 flex items-center justify-center mb-4">
+              <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
+                  <div
+                    key={pos}
+                    className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
+                      currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
+                    }`}
+                    style={{
+                      aspectRatio: "1/1",
+                      ...(currentPosition === pos
+                        ? {
+                            backgroundColor: getStimulusColor(gridColor),
+                            boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
+                          }
+                        : {}),
+                    }}
+                  >
+                    {enabledTypes.shape && currentShape && currentPosition === pos && (
+                      <div className="text-foreground flex items-center justify-center absolute inset-0">
+                        {renderShape(currentShape, 100)}
+                      </div>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
             </div>
           )}
-        </div>
 
-        {/* Response buttons - fixed to bottom */}
-        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe">
-          <div
-            className={`flex items-center px-4 pb-6 ${
-              getEnabledCount() === 2 ? "justify-between" : "justify-center gap-4"
-            }`}
-          >
-            {enabledTypes.position && (
-              <button
-                onClick={() => handleResponse("position")}
-                className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                  responses.position
-                    ? responseCorrectness.position
-                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
-                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                    : "bg-card hover:bg-muted shadow-lg border border-border"
-                }`}
-              >
-                {getEnabledCount() > 3 ? "Pos" : "Position"}
-              </button>
+          {/* Stimulus indicators */}
+          <div className="space-y-3 mb-6">
+            {/* Letters and Numbers combined in one row */}
+            {(enabledTypes.audio || enabledTypes.number) && (
+              <div className="flex justify-center items-center gap-4">
+                {enabledTypes.audio && (
+                  <div
+                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
+                      currentSound ? "bg-accent shadow-lg shadow-accent/50" : "bg-muted"
+                    }`}
+                  >
+                    <Volume2 size={24} />
+                    <span className="text-2xl font-bold font-mono">{currentSound || "---"}</span>
+                  </div>
+                )}
+
+                {enabledTypes.number && (
+                  <div
+                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
+                      currentNumber ? "bg-primary shadow-lg shadow-primary/50" : "bg-muted"
+                    }`}
+                  >
+                    <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
+                  </div>
+                )}
+              </div>
             )}
-            {enabledTypes.audio && (
-              <button
-                onClick={() => handleResponse("audio")}
-                className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                  responses.audio
-                    ? responseCorrectness.audio
-                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
-                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                    : "bg-card hover:bg-muted shadow-lg border border-border"
-                }`}
-              >
-                {getEnabledCount() > 3 ? "Let" : "Letters"}
-              </button>
+
+            {/* Color indicator - only if no grid */}
+            {enabledTypes.color && !enabledTypes.position && (
+              <div className="text-center">
+                <div
+                  className={`inline-block w-24 h-24 rounded-xl transition-all ${
+                    currentColor ? "shadow-2xl" : "bg-muted"
+                  }`}
+                  style={
+                    currentColor
+                      ? {
+                          backgroundColor: getStimulusColor(currentColor),
+                        }
+                      : {}
+                  }
+                />
+              </div>
             )}
-            {enabledTypes.color && (
-              <button
-                onClick={() => handleResponse("color")}
-                className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                  responses.color
-                    ? responseCorrectness.color
-                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
-                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                    : "bg-card hover:bg-muted shadow-lg border border-border"
-                }`}
-              >
-                {getEnabledCount() > 3 ? "Col" : "Color"}
-              </button>
+
+            {/* Shape indicator - only if no grid */}
+            {enabledTypes.shape && !enabledTypes.position && (
+              <div className="text-center">
+                <div
+                  className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
+                    currentShape ? "bg-accent shadow-lg" : "bg-muted"
+                  }`}
+                >
+                  {currentShape && (
+                    <div className="text-foreground absolute inset-0 flex items-center justify-center">
+                      {renderShape(currentShape, 96)}
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
-            {enabledTypes.shape && (
-              <button
-                onClick={() => handleResponse("shape")}
-                className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                  responses.shape
-                    ? responseCorrectness.shape
-                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
-                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                    : "bg-card hover:bg-muted shadow-lg border border-border"
-                }`}
-              >
-                {getEnabledCount() > 3 ? "Shp" : "Shape"}
-              </button>
-            )}
-            {enabledTypes.number && (
-              <button
-                onClick={() => handleResponse("number")}
-                className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
-                  responses.number
-                    ? responseCorrectness.number
-                      ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
-                      : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
-                    : "bg-card hover:bg-muted shadow-lg border border-border"
-                }`}
-              >
-                {getEnabledCount() > 3 ? "Num" : "Numbers"}
-              </button>
-            )}
+          </div>
+
+          {/* Response buttons - fixed to bottom */}
+          <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe">
+            <div
+              className={`flex items-center px-4 pb-6 ${
+                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-4"
+              }`}
+            >
+              {enabledTypes.position && (
+                <button
+                  onClick={() => handleResponse("position")}
+                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                    responses.position
+                      ? responseCorrectness.position
+                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                      : "bg-card hover:bg-muted shadow-lg border border-border"
+                  }`}
+                >
+                  {getEnabledCount() > 3 ? "Pos" : "Position"}
+                </button>
+              )}
+              {enabledTypes.audio && (
+                <button
+                  onClick={() => handleResponse("audio")}
+                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                    responses.audio
+                      ? responseCorrectness.audio
+                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                      : "bg-card hover:bg-muted shadow-lg border border-border"
+                  }`}
+                >
+                  {getEnabledCount() > 3 ? "Let" : "Letters"}
+                </button>
+              )}
+              {enabledTypes.color && (
+                <button
+                  onClick={() => handleResponse("color")}
+                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                    responses.color
+                      ? responseCorrectness.color
+                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                      : "bg-card hover:bg-muted shadow-lg border border-border"
+                  }`}
+                >
+                  {getEnabledCount() > 3 ? "Col" : "Color"}
+                </button>
+              )}
+              {enabledTypes.shape && (
+                <button
+                  onClick={() => handleResponse("shape")}
+                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                    responses.shape
+                      ? responseCorrectness.shape
+                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                      : "bg-card hover:bg-muted shadow-lg border border-border"
+                  }`}
+                >
+                  {getEnabledCount() > 3 ? "Shp" : "Shape"}
+                </button>
+              )}
+              {enabledTypes.number && (
+                <button
+                  onClick={() => handleResponse("number")}
+                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                    responses.number
+                      ? responseCorrectness.number
+                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
+                      : "bg-card hover:bg-muted shadow-lg border border-border"
+                  }`}
+                >
+                  {getEnabledCount() > 3 ? "Num" : "Numbers"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -931,81 +936,83 @@ const DualNBack = () => {
     const enabledTypesList = Object.keys(enabledTypes).filter((type) => enabledTypes[type])
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
-        <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-border">
-          <h2 className="font-bold text-center mb-6 text-2xl">Session Complete!</h2>
+      <div className="max-w-[1000px] mx-auto">
+        <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
+          <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-border">
+            <h2 className="font-bold text-center mb-6 text-2xl">Session Complete!</h2>
 
-          <div className="bg-muted rounded-xl p-4 mb-3">
-            <div className="text-center mb-4">
-              <div className="font-bold text-primary mb-2 text-4xl">{Math.round(overallAccuracy)}%</div>
-              <div className="text-sm text-muted-foreground">Overall Accuracy</div>
+            <div className="bg-muted rounded-xl p-4 mb-3">
+              <div className="text-center mb-4">
+                <div className="font-bold text-primary mb-2 text-4xl">{Math.round(overallAccuracy)}%</div>
+                <div className="text-sm text-muted-foreground">Overall Accuracy</div>
+              </div>
+
+              {/* Individual type accuracies */}
+              <div
+                className={`grid gap-4 mb-4`}
+                style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
+              >
+                {enabledTypesList.map((type) => (
+                  <div key={type} className="bg-card rounded-lg p-3 text-center border border-border">
+                    <div className="text-2xl font-bold text-accent-foreground">{Math.round(accuracies[type])}%</div>
+                    <div className="text-xs text-muted-foreground capitalize">{type}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Detailed stats */}
+              <div
+                className={`grid gap-4 text-sm`}
+                style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
+              >
+                {enabledTypesList.map((type) => (
+                  <div key={type} className="space-y-1">
+                    <div className="text-xs font-bold capitalize text-muted-foreground mb-2">{type}</div>
+                    <div className="flex justify-between">
+                      <span>✓ Correct:</span>
+                      <span className="font-bold text-primary">{scores[type].correct}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>✗ Missed:</span>
+                      <span className="font-bold text-destructive-foreground">{scores[type].missed}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>⚠ False:</span>
+                      <span className="font-bold text-accent-foreground">{scores[type].false}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Individual type accuracies */}
             <div
-              className={`grid gap-4 mb-4`}
-              style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
+              className={`text-center rounded-xl font-normal py-3 mb-3 ${
+                levelChange === "up"
+                  ? "bg-primary/20 text-primary"
+                  : levelChange === "down"
+                    ? "bg-destructive/20 text-destructive-foreground"
+                    : "bg-accent/20 text-accent-foreground"
+              }`}
             >
-              {enabledTypesList.map((type) => (
-                <div key={type} className="bg-card rounded-lg p-3 text-center border border-border">
-                  <div className="text-2xl font-bold text-accent-foreground">{Math.round(accuracies[type])}%</div>
-                  <div className="text-xs text-muted-foreground capitalize">{type}</div>
-                </div>
-              ))}
+              {levelChange === "up" && `🎉 Advancing to ${nextLevel}-BACK!`}
+              {levelChange === "down" && `Dropping to ${nextLevel}-BACK`}
+              {levelChange === "same" && `Staying at ${nextLevel}-BACK`}
             </div>
 
-            {/* Detailed stats */}
-            <div
-              className={`grid gap-4 text-sm`}
-              style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
+            <button
+              onClick={continueTraining}
+              className="w-full py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3 font-bold text-lg"
             >
-              {enabledTypesList.map((type) => (
-                <div key={type} className="space-y-1">
-                  <div className="text-xs font-bold capitalize text-muted-foreground mb-2">{type}</div>
-                  <div className="flex justify-between">
-                    <span>✓ Correct:</span>
-                    <span className="font-bold text-primary">{scores[type].correct}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>✗ Missed:</span>
-                    <span className="font-bold text-destructive-foreground">{scores[type].missed}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>⚠ False:</span>
-                    <span className="font-bold text-accent-foreground">{scores[type].false}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+              {"Next Training"}
+            </button>
+
+            <button
+              onClick={() => setGameState("start")}
+              className="w-full py-3 bg-muted rounded-xl hover:bg-accent transition"
+            >
+              Back to Menu
+            </button>
           </div>
-
-          <div
-            className={`text-center rounded-xl font-normal py-3 mb-3 ${
-              levelChange === "up"
-                ? "bg-primary/20 text-primary"
-                : levelChange === "down"
-                  ? "bg-destructive/20 text-destructive-foreground"
-                  : "bg-accent/20 text-accent-foreground"
-            }`}
-          >
-            {levelChange === "up" && `🎉 Advancing to ${nextLevel}-BACK!`}
-            {levelChange === "down" && `Dropping to ${nextLevel}-BACK`}
-            {levelChange === "same" && `Staying at ${nextLevel}-BACK`}
-          </div>
-
-          <button
-            onClick={continueTraining}
-            className="w-full py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3 font-bold text-lg"
-          >
-            {"Next Training"}
-          </button>
-
-          <button
-            onClick={() => setGameState("start")}
-            className="w-full py-3 bg-muted rounded-xl hover:bg-accent transition"
-          >
-            Back to Menu
-          </button>
         </div>
       </div>
     )
