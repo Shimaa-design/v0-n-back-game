@@ -949,7 +949,7 @@ const DualNBack = () => {
 
               {/* Individual type accuracies */}
               <div
-                className={`grid gap-4 mb-4`}
+                className={`grid mb-4 gap-2`}
                 style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
               >
                 {enabledTypesList.map((type) => (
@@ -962,7 +962,7 @@ const DualNBack = () => {
 
               {/* Detailed stats */}
               <div
-                className={`grid gap-4 text-sm`}
+                className={`grid text-sm gap-4`}
                 style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
               >
                 {enabledTypesList.map((type) => (
@@ -988,10 +988,10 @@ const DualNBack = () => {
             <div
               className={`text-center rounded-xl font-normal py-3 mb-3 ${
                 levelChange === "up"
-                  ? "bg-primary/20 text-primary"
+                  ? "bg-primary text-primary-foreground"
                   : levelChange === "down"
-                    ? "bg-destructive/20 text-destructive-foreground"
-                    : "bg-accent/20 text-accent-foreground"
+                    ? "bg-destructive text-destructive-foreground"
+                    : "bg-accent text-accent-foreground"
               }`}
             >
               {levelChange === "up" && `🎉 Advancing to ${nextLevel}-BACK!`}
