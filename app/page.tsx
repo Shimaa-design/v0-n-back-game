@@ -542,9 +542,9 @@ const DualNBack = () => {
           ) : (
             // Main Menu Content
             <>
-              <div className="flex items-center gap-3 mb-8 justify-start">
-                <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-11" />
-                <h1 className="font-bold bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent text-5xl">
+              <div className="flex items-center gap-3 mb-8 justify-start flex-col">
+                <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-28" />
+                <h1 className="font-bold bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent text-4xl">
                   N-Back
                 </h1>
               </div>
