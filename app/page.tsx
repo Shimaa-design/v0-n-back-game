@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Volume2, Info, TrendingUp, X, Minus, Plus } from "lucide-react"
+import { Info, TrendingUp, X, Minus, Plus } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -633,7 +633,7 @@ const DualNBack = () => {
                 <button
                   onClick={startGame}
                   disabled={enabledCount === 0}
-                  className={`w-full py-4 text-xl transition transform rounded-full font-bold shadow-none ${
+                  className={`w-full text-xl transition transform font-bold shadow-none rounded-xl py-3 ${
                     enabledCount === 0
                       ? "bg-muted text-muted-foreground cursor-not-allowed"
                       : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
@@ -727,6 +727,7 @@ const DualNBack = () => {
   // Playing screen
   if (gameState === "playing") {
     const gridColor = currentColor || "blue"
+    const buttonSizeClass = getEnabledCount() >= 4 ? "w-14 h-14 md:w-28 md:h-28" : "w-16 h-16 md:w-28 md:h-28"
 
     return (
       <div className="max-w-[1000px] mx-auto">
@@ -770,7 +771,7 @@ const DualNBack = () => {
                     }}
                   >
                     {enabledTypes.shape && currentShape && currentPosition === pos && (
-                      <div className="text-foreground flex items-center justify-center absolute inset-0">
+                      <div className="text-primary-foreground flex items-center justify-center absolute inset-0">
                         {renderShape(currentShape, 100)}
                       </div>
                     )}
@@ -784,22 +785,21 @@ const DualNBack = () => {
           <div className="space-y-3 mb-6">
             {/* Letters and Numbers combined in one row */}
             {(enabledTypes.audio || enabledTypes.number) && (
-              <div className="flex justify-center items-center gap-4">
+              <div className="flex justify-center items-center gap-7">
                 {enabledTypes.audio && (
                   <div
                     className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                      currentSound ? "bg-accent shadow-lg shadow-accent/50" : "bg-muted"
+                      currentSound ? "shadow-lg shadow-primary/50" : "bg-muted"
                     }`}
                   >
-                    <Volume2 size={24} />
-                    <span className="text-2xl font-bold font-mono">{currentSound || "---"}</span>
+                    <span className="text-2xl font-bold font-mono">{currentSound || "-"}</span>
                   </div>
                 )}
 
                 {enabledTypes.number && (
                   <div
                     className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                      currentNumber ? "bg-primary shadow-lg shadow-primary/50" : "bg-muted"
+                      currentNumber ? " shadow-lg shadow-primary/50" : "bg-muted"
                     }`}
                   >
                     <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
@@ -848,77 +848,82 @@ const DualNBack = () => {
           <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
               className={`flex items-center px-4 pb-6 ${
-                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-4"
+                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-2 md:gap-4"
               }`}
             >
               {enabledTypes.position && (
                 <button
                   onClick={() => handleResponse("position")}
-                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.position
                       ? responseCorrectness.position
-                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
                         : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {getEnabledCount() > 3 ? "Pos" : "Position"}
+                  <span className="md:hidden">📍</span>
+                  <span className="hidden md:inline">Position</span>
                 </button>
               )}
               {enabledTypes.audio && (
                 <button
                   onClick={() => handleResponse("audio")}
-                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.audio
                       ? responseCorrectness.audio
-                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
                         : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {getEnabledCount() > 3 ? "Let" : "Letters"}
+                  <span className="md:hidden">🔤</span>
+                  <span className="hidden md:inline">Letters</span>
                 </button>
               )}
               {enabledTypes.color && (
                 <button
                   onClick={() => handleResponse("color")}
-                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.color
                       ? responseCorrectness.color
-                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
                         : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {getEnabledCount() > 3 ? "Col" : "Color"}
+                  <span className="md:hidden">🎨</span>
+                  <span className="hidden md:inline">Color</span>
                 </button>
               )}
               {enabledTypes.shape && (
                 <button
                   onClick={() => handleResponse("shape")}
-                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.shape
                       ? responseCorrectness.shape
-                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
                         : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {getEnabledCount() > 3 ? "Shp" : "Shape"}
+                  <span className="md:hidden">🔷</span>
+                  <span className="hidden md:inline">Shape</span>
                 </button>
               )}
               {enabledTypes.number && (
                 <button
                   onClick={() => handleResponse("number")}
-                  className={`w-28 h-28 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
                     responses.number
                       ? responseCorrectness.number
-                        ? "bg-primary text-primary-foreground shadow-xl shadow-primary/50"
+                        ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
                         : "bg-destructive text-destructive-foreground shadow-xl shadow-destructive/50"
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {getEnabledCount() > 3 ? "Num" : "Numbers"}
+                  <span className="md:hidden">🔢</span>
+                  <span className="hidden md:inline">Numbers</span>
                 </button>
               )}
             </div>
@@ -947,38 +952,29 @@ const DualNBack = () => {
                 <div className="text-sm text-muted-foreground">Overall Accuracy</div>
               </div>
 
-              {/* Individual type accuracies */}
               <div
-                className={`grid mb-4 gap-2`}
+                className={`grid gap-2`}
                 style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
               >
                 {enabledTypesList.map((type) => (
-                  <div key={type} className="bg-card rounded-lg p-3 text-center border border-border">
-                    <div className="text-2xl font-bold text-accent-foreground">{Math.round(accuracies[type])}%</div>
-                    <div className="text-xs text-muted-foreground capitalize">{type}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Detailed stats */}
-              <div
-                className={`grid text-sm gap-4`}
-                style={{ gridTemplateColumns: `repeat(${Math.min(enabledTypesList.length, 2)}, 1fr)` }}
-              >
-                {enabledTypesList.map((type) => (
-                  <div key={type} className="space-y-1">
-                    <div className="text-xs font-bold capitalize text-muted-foreground mb-2">{type}</div>
-                    <div className="flex justify-between">
-                      <span>✓ Correct:</span>
-                      <span className="font-bold text-primary">{scores[type].correct}</span>
+                  <div key={type} className="bg-card rounded-lg p-3 border border-border">
+                    <div className="text-center mb-3">
+                      <div className="text-2xl font-bold text-accent-foreground">{Math.round(accuracies[type])}%</div>
+                      <div className="text-xs text-muted-foreground capitalize">{type}</div>
                     </div>
-                    <div className="flex justify-between">
-                      <span>✗ Missed:</span>
-                      <span className="font-bold text-destructive-foreground">{scores[type].missed}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>⚠ False:</span>
-                      <span className="font-bold text-accent-foreground">{scores[type].false}</span>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span>✓ Correct:</span>
+                        <span className="font-bold text-primary">{scores[type].correct}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>✗ Missed:</span>
+                        <span className="font-bold text-destructive-foreground">{scores[type].missed}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>⚠ False:</span>
+                        <span className="font-bold text-accent-foreground">{scores[type].false}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1001,14 +997,14 @@ const DualNBack = () => {
 
             <button
               onClick={continueTraining}
-              className="w-full py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3 font-bold text-lg"
+              className="w-full bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3 font-bold text-lg py-3"
             >
               {"Next Training"}
             </button>
 
             <button
               onClick={() => setGameState("start")}
-              className="w-full py-3 bg-muted rounded-xl hover:bg-accent transition"
+              className="w-full py-3 bg-muted rounded-xl hover:shadow-xl transition transform hover:scale-105"
             >
               Back to Menu
             </button>
