@@ -776,97 +776,101 @@ const DualNBack = () => {
             </div>
           </div>
 
-          {enabledTypes.position && (
-            <div className="flex-1 flex items-center justify-center mb-4">
-              <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
-                  <div
-                    key={pos}
-                    className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
-                      currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
-                    }`}
-                    style={{
-                      aspectRatio: "1/1",
-                      ...(currentPosition === pos
-                        ? {
-                            backgroundColor: getStimulusColor(gridColor),
-                            boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
-                          }
-                        : {}),
-                    }}
-                  >
-                    {enabledTypes.shape && currentShape && currentPosition === pos && (
-                      <div className="text-primary-foreground flex items-center justify-center absolute inset-0">
-                        {renderShape(currentShape, 100)}
+          <div className={`flex-1 ${enabledCount <= 2 ? "flex items-center justify-center" : ""}`}>
+            <div className="w-full">
+              {enabledTypes.position && (
+                <div className="flex-1 flex items-center justify-center mb-4">
+                  <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
+                      <div
+                        key={pos}
+                        className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
+                          currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
+                        }`}
+                        style={{
+                          aspectRatio: "1/1",
+                          ...(currentPosition === pos
+                            ? {
+                                backgroundColor: getStimulusColor(gridColor),
+                                boxShadow: `0 25px 50px -12px ${getStimulusColor(gridColor)}80`,
+                              }
+                            : {}),
+                        }}
+                      >
+                        {enabledTypes.shape && currentShape && currentPosition === pos && (
+                          <div className="text-primary-foreground flex items-center justify-center absolute inset-0">
+                            {renderShape(currentShape, 100)}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-3 mb-6">
+                {(enabledTypes.audio || enabledTypes.number) && (
+                  <div className="flex justify-center items-center gap-7">
+                    {enabledTypes.audio && (
+                      <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
+                        <span className="font-bold font-mono text-3xl">{currentSound || "-"}</span>
+                      </div>
+                    )}
+
+                    {enabledTypes.number && (
+                      <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
+                        <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
                       </div>
                     )}
                   </div>
-                ))}
+                )}
+
+                {enabledTypes.color && !enabledTypes.position && (
+                  <div className="text-center">
+                    <div
+                      className={`inline-block w-24 h-24 rounded-xl transition-all ${
+                        currentColor ? "shadow-2xl" : "bg-muted"
+                      }`}
+                      style={
+                        currentColor
+                          ? {
+                              backgroundColor: getStimulusColor(currentColor),
+                            }
+                          : {}
+                      }
+                    />
+                  </div>
+                )}
+
+                {enabledTypes.shape && !enabledTypes.position && (
+                  <div className="text-center">
+                    <div
+                      className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
+                        currentShape ? "bg-accent shadow-lg" : "bg-muted"
+                      }`}
+                    >
+                      {currentShape && (
+                        <div className="text-foreground absolute inset-0 flex items-center justify-center">
+                          {renderShape(currentShape, 96)}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-
-          <div className="space-y-3 mb-6">
-            {(enabledTypes.audio || enabledTypes.number) && (
-              <div className="flex justify-center items-center gap-7">
-                {enabledTypes.audio && (
-                  <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
-                    <span className="font-bold font-mono text-3xl">{currentSound || "-"}</span>
-                  </div>
-                )}
-
-                {enabledTypes.number && (
-                  <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
-                    <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {enabledTypes.color && !enabledTypes.position && (
-              <div className="text-center">
-                <div
-                  className={`inline-block w-24 h-24 rounded-xl transition-all ${
-                    currentColor ? "shadow-2xl" : "bg-muted"
-                  }`}
-                  style={
-                    currentColor
-                      ? {
-                          backgroundColor: getStimulusColor(currentColor),
-                        }
-                      : {}
-                  }
-                />
-              </div>
-            )}
-
-            {enabledTypes.shape && !enabledTypes.position && (
-              <div className="text-center">
-                <div
-                  className={`inline-flex items-center justify-center w-24 h-24 rounded-xl transition-all relative ${
-                    currentShape ? "bg-accent shadow-lg" : "bg-muted"
-                  }`}
-                >
-                  {currentShape && (
-                    <div className="text-foreground absolute inset-0 flex items-center justify-center">
-                      {renderShape(currentShape, 96)}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
-              className={`flex items-center px-4 pb-6 gap-4 ${
+              className={`flex items-center px-4 pb-6 gap-2 md:gap-4 ${
                 getEnabledCount() === 2 ? "justify-between" : "justify-center gap-0.5 md:gap-4"
               }`}
             >
               {enabledTypes.position && (
                 <button
                   onClick={() => handleResponse("position")}
-                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.position
                       ? responseCorrectness.position
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -881,7 +885,7 @@ const DualNBack = () => {
               {enabledTypes.audio && (
                 <button
                   onClick={() => handleResponse("audio")}
-                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.audio
                       ? responseCorrectness.audio
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -896,7 +900,7 @@ const DualNBack = () => {
               {enabledTypes.color && (
                 <button
                   onClick={() => handleResponse("color")}
-                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.color
                       ? responseCorrectness.color
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -911,7 +915,7 @@ const DualNBack = () => {
               {enabledTypes.shape && (
                 <button
                   onClick={() => handleResponse("shape")}
-                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.shape
                       ? responseCorrectness.shape
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -926,7 +930,7 @@ const DualNBack = () => {
               {enabledTypes.number && (
                 <button
                   onClick={() => handleResponse("number")}
-                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
+                  className={`flex-1 max-w-[75px] aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.number
                       ? responseCorrectness.number
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
