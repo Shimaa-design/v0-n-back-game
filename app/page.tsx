@@ -754,7 +754,7 @@ const DualNBack = () => {
   if (gameState === "playing") {
     const gridColor = currentColor || "blue"
     const enabledCount = getEnabledCount()
-    const maxButtonSize = enabledCount >= 5 ? "max-w-[64px]" : enabledCount >= 4 ? "max-w-[80px]" : "max-w-[110px]"
+    const maxButtonSize = enabledCount >= 5 ? "max-w-[75px]" : enabledCount >= 4 ? "max-w-[90px]" : "max-w-[120px]"
 
     return (
       <div className="max-w-[1000px] mx-auto">
@@ -810,21 +810,13 @@ const DualNBack = () => {
             {(enabledTypes.audio || enabledTypes.number) && (
               <div className="flex justify-center items-center gap-7">
                 {enabledTypes.audio && (
-                  <div
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                      currentSound ? "shadow-lg shadow-primary/50" : "bg-muted"
-                    }`}
-                  >
-                    <span className="text-2xl font-bold font-mono">{currentSound || "-"}</span>
+                  <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
+                    <span className="font-bold font-mono text-3xl">{currentSound || "-"}</span>
                   </div>
                 )}
 
                 {enabledTypes.number && (
-                  <div
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all ${
-                      currentNumber ? " shadow-lg shadow-primary/50" : "bg-muted"
-                    }`}
-                  >
+                  <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all bg-muted">
                     <span className="text-3xl font-bold font-mono">{currentNumber || "-"}</span>
                   </div>
                 )}
@@ -867,8 +859,8 @@ const DualNBack = () => {
 
           <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
-              className={`flex items-center px-4 pb-6 ${
-                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-1 md:gap-4"
+              className={`flex items-center px-4 pb-6 gap-4 ${
+                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-0.5 md:gap-4"
               }`}
             >
               {enabledTypes.position && (
