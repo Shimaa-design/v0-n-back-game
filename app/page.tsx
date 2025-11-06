@@ -507,7 +507,17 @@ const DualNBack = () => {
     const todayStats = getTodayStats()
 
     return (
-      <div className="max-w-[1000px] mx-auto">
+      <div
+        className="max-w-[1000px] mx-auto relative"
+        style={{
+          backgroundImage:
+            "url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Frame%205-lBLaYHvht88k2eMfa3ZgEywa7gUJDw.png')",
+          backgroundPosition: "top center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "200px",
+          paddingTop: "80px", // Reduced from 120px to 80px
+        }}
+      >
         <div className="min-h-screen  p-4 flex flex-col items-center justify-center ">
           <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
             <button
@@ -588,7 +598,6 @@ const DualNBack = () => {
             ) : (
               <>
                 <div className="flex items-center gap-3 mb-8 justify-start flex-col">
-                  <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-28" />
                   <h1 className="font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-primary text-3xl">
                     {"Dual-N-Back"}
                   </h1>
