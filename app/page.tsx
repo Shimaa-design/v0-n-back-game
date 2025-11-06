@@ -1043,19 +1043,21 @@ const DualNBack = () => {
               {levelChange === "same" && `Staying at ${nextLevel}-BACK`}
             </div>
 
-            <button
-              onClick={continueTraining}
-              className="w-full bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3 font-bold text-lg py-3"
-            >
-              {"Next Training"}
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setGameState("start")}
+                className="flex-1 py-3 bg-muted rounded-xl hover:shadow-xl transition transform hover:scale-105"
+              >
+                Back to Menu
+              </button>
 
-            <button
-              onClick={() => setGameState("start")}
-              className="w-full py-3 bg-muted rounded-xl hover:shadow-xl transition transform hover:scale-105"
-            >
-              Back to Menu
-            </button>
+              <button
+                onClick={continueTraining}
+                className="flex-1 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 font-bold text-lg py-3"
+              >
+                {"Next Training"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
