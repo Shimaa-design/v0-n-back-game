@@ -518,7 +518,7 @@ const DualNBack = () => {
           paddingTop: "80px",
         }}
       >
-        <div className="min-h-screen p-4 flex flex-col items-center justify-start mt-20 ">
+        <div className="min-h-screen p-4 flex flex-col items-center justify-start mt-24 ">
           <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
             <button
               onClick={() => setShowInstructionsPage(!showInstructionsPage)}
