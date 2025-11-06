@@ -3,7 +3,10 @@
 import { useState, useEffect, useRef } from "react"
 import { Volume2, Info, TrendingUp, X, Minus, Plus } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 const DualNBack = () => {
+  const [mounted, setMounted] = useState(false)
   const [gameState, setGameState] = useState("start") // start, playing, results
   const [nLevel, setNLevel] = useState(1)
   const [currentTrial, setCurrentTrial] = useState(0)
@@ -71,21 +74,51 @@ const DualNBack = () => {
   const shapes = ["circle", "square", "triangle", "diamond", "star", "hexagon", "pentagon", "heart"]
   const numbers = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
-  const synth = useRef(window.speechSynthesis)
+  const synth = useRef(null)
   const trialTimeoutRef = useRef(null)
   const responseWindowRef = useRef(null)
+  const sequencesRef = useRef({ positions: [], sounds: [], colors: [], shapes: [], numbers: [] })
 
-  // Load daily scores from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("nback-daily-scores")
-    if (stored) {
-      try {
-        setDailyScores(JSON.parse(stored))
-      } catch (e) {
-        console.error("Failed to load scores:", e)
+    setMounted(true)
+    if (typeof window !== "undefined") {
+      synth.current = window.speechSynthesis
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("nback-daily-scores")
+      if (stored) {
+        try {
+          setDailyScores(JSON.parse(stored))
+        } catch (e) {
+          console.error("Failed to load scores:", e)
+        }
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (gameState === "playing" && currentTrial === 0) {
+      runTrial(0)
+    }
+
+    return () => {
+      if (trialTimeoutRef.current) clearTimeout(trialTimeoutRef.current)
+    }
+  }, [gameState])
+
+  useEffect(() => {
+    if (autoStart && gameState === "start") {
+      setAutoStart(false)
+      startGame()
+    }
+  }, [nLevel, autoStart])
+
+  if (!mounted) {
+    return null
+  }
 
   // Save score to localStorage
   const saveScore = (score) => {
@@ -178,8 +211,6 @@ const DualNBack = () => {
 
     return sequences
   }
-
-  const sequencesRef = useRef({ positions: [], sounds: [], colors: [], shapes: [], numbers: [] })
 
   const speakText = (text) => {
     if (synth.current) {
@@ -387,24 +418,6 @@ const DualNBack = () => {
       setResponseCorrectness((prev) => ({ ...prev, [type]: match }))
     }
   }
-
-  useEffect(() => {
-    if (gameState === "playing" && currentTrial === 0) {
-      runTrial(0)
-    }
-
-    return () => {
-      if (trialTimeoutRef.current) clearTimeout(trialTimeoutRef.current)
-    }
-  }, [gameState])
-
-  // Auto-start game after level adjustment
-  useEffect(() => {
-    if (autoStart && gameState === "start") {
-      setAutoStart(false)
-      startGame()
-    }
-  }, [nLevel, autoStart])
 
   const calculateAccuracy = () => {
     const enabledTypesList = Object.keys(enabledTypes).filter((type) => enabledTypes[type])
@@ -646,7 +659,7 @@ const DualNBack = () => {
                       <div key={idx} className="bg-white/5 rounded-lg p-3">
                         <div className="flex justify-between items-start mb-1">
                           <div className="font-bold">{new Date(score.timestamp).toLocaleDateString()}</div>
-                          <div className="text-sm text-indigo-300">
+                          <div className="text-sm text-indigo-200">
                             {new Date(score.timestamp).toLocaleTimeString()}
                           </div>
                         </div>
