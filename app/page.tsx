@@ -22,35 +22,71 @@ const getStimulusColor = (colorName: string) => {
 const DualNBack = () => {
   const [mounted, setMounted] = useState(false)
   const [gameState, setGameState] = useState("start") // start, playing, results
-  const [nLevel, setNLevel] = useState(1)
+  const [nLevel, setNLevel] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("nback-settings")
+      if (stored) {
+        try {
+          const settings = JSON.parse(stored)
+          return settings.nLevel || 1
+        } catch (e) {
+          return 1
+        }
+      }
+    }
+    return 1
+  })
   const [currentTrial, setCurrentTrial] = useState(0)
   const [totalTrials] = useState(20)
   const maxNLevel = 8 // Cap for realistic human performance
 
-  // Game types
-  const [enabledTypes, setEnabledTypes] = useState({
-    audio: false,
-    position: true,
-    color: true,
-    shape: false,
-    number: false,
+  const [enabledTypes, setEnabledTypes] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("nback-settings")
+      if (stored) {
+        try {
+          const settings = JSON.parse(stored)
+          return (
+            settings.enabledTypes || {
+              audio: false,
+              position: true,
+              color: true,
+              shape: false,
+              number: false,
+            }
+          )
+        } catch (e) {
+          return {
+            audio: false,
+            position: true,
+            color: true,
+            shape: false,
+            number: false,
+          }
+        }
+      }
+    }
+    return {
+      audio: false,
+      position: true,
+      color: true,
+      shape: false,
+      number: false,
+    }
   })
 
-  // Current stimuli
   const [currentPosition, setCurrentPosition] = useState(null)
   const [currentSound, setCurrentSound] = useState("")
   const [currentColor, setCurrentColor] = useState("")
   const [currentShape, setCurrentShape] = useState("")
   const [currentNumber, setCurrentNumber] = useState("")
 
-  // History tracking
   const [positionHistory, setPositionHistory] = useState([])
   const [soundHistory, setSoundHistory] = useState([])
   const [colorHistory, setColorHistory] = useState([])
   const [shapeHistory, setShapeHistory] = useState([])
   const [numberHistory, setNumberHistory] = useState([])
 
-  // User responses
   const [responses, setResponses] = useState({
     audio: false,
     position: false,
@@ -59,7 +95,6 @@ const DualNBack = () => {
     number: false,
   })
 
-  // Track if each response was correct or incorrect
   const [responseCorrectness, setResponseCorrectness] = useState({
     audio: null, // null = not pressed, true = correct, false = incorrect
     position: null,
@@ -68,7 +103,6 @@ const DualNBack = () => {
     number: null,
   })
 
-  // Scoring for each type
   const [scores, setScores] = useState({
     audio: { correct: 0, missed: 0, false: 0 },
     position: { correct: 0, missed: 0, false: 0 },
@@ -130,11 +164,20 @@ const DualNBack = () => {
     }
   }, [nLevel, autoStart])
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && mounted) {
+      const settings = {
+        nLevel,
+        enabledTypes,
+      }
+      localStorage.setItem("nback-settings", JSON.stringify(settings))
+    }
+  }, [nLevel, enabledTypes, mounted])
+
   if (!mounted) {
     return null
   }
 
-  // Save score to localStorage
   const saveScore = (score) => {
     const today = new Date().toISOString().split("T")[0] // YYYY-MM-DD
     const newScore = {
@@ -150,7 +193,6 @@ const DualNBack = () => {
     localStorage.setItem("nback-daily-scores", JSON.stringify(updated))
   }
 
-  // Get stats for today
   const getTodayStats = () => {
     const today = new Date().toISOString().split("T")[0]
     const todayScores = dailyScores.filter((s) => s.date === today)
@@ -166,7 +208,6 @@ const DualNBack = () => {
     }
   }
 
-  // Generate sequences for a session
   const generateSequences = () => {
     const sequences = {
       positions: [],
@@ -246,7 +287,6 @@ const DualNBack = () => {
   }
 
   const renderShape = (shape, containerSize) => {
-    // All shapes use 70% of their container for consistent sizing
     const size = containerSize * 0.7
 
     const shapes = {
@@ -291,7 +331,6 @@ const DualNBack = () => {
   }
 
   const startGame = () => {
-    // Generate sequences and start first trial immediately
     const sequences = generateSequences()
     sequencesRef.current = sequences
     setGameState("playing")
@@ -343,7 +382,6 @@ const DualNBack = () => {
 
   const runTrial = (trialIndex) => {
     if (trialIndex >= totalTrials) {
-      // Save score automatically when session completes
       const { overallAccuracy } = calculateAccuracy()
       saveScore(overallAccuracy)
       setGameState("results")
@@ -383,7 +421,6 @@ const DualNBack = () => {
       setTimeout(() => speakText(number), 600)
     }
 
-    // Show stimulus for 500ms
     setTimeout(() => {
       setCurrentPosition(null)
       setCurrentSound("")
@@ -400,7 +437,6 @@ const DualNBack = () => {
       number: false,
     }
 
-    // After 2500ms total, evaluate and move to next trial
     trialTimeoutRef.current = setTimeout(() => {
       evaluateResponse(trialIndex, responseWindowRef.current)
 
@@ -419,7 +455,6 @@ const DualNBack = () => {
       setResponses((prev) => ({ ...prev, [type]: true }))
       responseWindowRef.current[type] = true
 
-      // Check if this response is correct
       const typeIndex = ["position", "audio", "color", "shape", "number"].indexOf(type)
       const historyKeys = ["positions", "sounds", "colors", "shapes", "numbers"]
       const historyKey = historyKeys[typeIndex]
@@ -428,7 +463,6 @@ const DualNBack = () => {
         currentTrial >= nLevel &&
         sequencesRef.current[historyKey][currentTrial] === sequencesRef.current[historyKey][currentTrial - nLevel]
 
-      // If there's a match, pressing is correct. If no match, pressing is incorrect (false positive)
       setResponseCorrectness((prev) => ({ ...prev, [type]: match }))
     }
   }
@@ -468,7 +502,6 @@ const DualNBack = () => {
     setGameState("start")
   }
 
-  // Start screen
   if (gameState === "start") {
     const enabledCount = getEnabledCount()
     const todayStats = getTodayStats()
@@ -477,7 +510,6 @@ const DualNBack = () => {
       <div className="max-w-[1000px] mx-auto">
         <div className="min-h-screen  p-4 flex flex-col items-center justify-center ">
           <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
-            {/* Info icon in top right */}
             <button
               onClick={() => setShowInstructionsPage(!showInstructionsPage)}
               className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-muted hover:bg-accent rounded-full transition text-muted-foreground"
@@ -486,7 +518,6 @@ const DualNBack = () => {
             </button>
 
             {showInstructionsPage ? (
-              // Instructions Page
               <div className="py-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">How to Play</h2>
 
@@ -555,7 +586,6 @@ const DualNBack = () => {
                 </div>
               </div>
             ) : (
-              // Main Menu Content
               <>
                 <div className="flex items-center gap-3 mb-8 justify-start flex-col">
                   <img src="/images/design-mode/n-back.png" alt="N-Back" className="size-28" />
@@ -564,7 +594,6 @@ const DualNBack = () => {
                   </h1>
                 </div>
 
-                {/* Today's Stats */}
                 {todayStats && (
                   <button
                     onClick={() => setShowProgress(true)}
@@ -604,7 +633,6 @@ const DualNBack = () => {
                   </div>
                 </div>
 
-                {/* Type Selection as selectable cards */}
                 <div className="bg-muted rounded-xl p-4 mb-4">
                   <h3 className="text-lg mb-3 font-bold text-left text-muted-foreground">Type</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -645,7 +673,6 @@ const DualNBack = () => {
             )}
           </div>
 
-          {/* Progress Modal */}
           {showProgress && (
             <div
               className="fixed inset-0 bg-black/80 flex items-start justify-center z-50 p-4 overflow-y-auto"
@@ -682,7 +709,7 @@ const DualNBack = () => {
                               {new Date(score.timestamp).toLocaleTimeString()}
                             </div>
                           </div>
-                          <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center gap-4 text-sm justify-between">
                             <span className="font-bold text-primary">{score.nLevel}-BACK</span>
                             <span
                               className={
@@ -711,7 +738,7 @@ const DualNBack = () => {
                         setShowProgress(false)
                       }
                     }}
-                    className="w-full mt-4 py-2 bg-destructive/20 text-destructive-foreground rounded-lg hover:bg-destructive/30 transition"
+                    className="w-full mt-4 py-2 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/30 transition"
                   >
                     Clear All Data
                   </button>
@@ -724,7 +751,6 @@ const DualNBack = () => {
     )
   }
 
-  // Playing screen
   if (gameState === "playing") {
     const gridColor = currentColor || "blue"
     const enabledCount = getEnabledCount()
@@ -733,7 +759,6 @@ const DualNBack = () => {
     return (
       <div className="max-w-[1000px] mx-auto">
         <div className="min-h-screen text-foreground p-4 flex flex-col pb-40 bg-card">
-          {/* Header */}
           <div className="flex justify-between items-center mb-4 relative">
             <button
               onClick={exitGame}
@@ -751,7 +776,6 @@ const DualNBack = () => {
             </div>
           </div>
 
-          {/* Grid - only show if position enabled */}
           {enabledTypes.position && (
             <div className="flex-1 flex items-center justify-center mb-4">
               <div className="grid grid-cols-3 gap-2 w-full max-w-sm aspect-square p-4">
@@ -782,9 +806,7 @@ const DualNBack = () => {
             </div>
           )}
 
-          {/* Stimulus indicators */}
           <div className="space-y-3 mb-6">
-            {/* Letters and Numbers combined in one row */}
             {(enabledTypes.audio || enabledTypes.number) && (
               <div className="flex justify-center items-center gap-7">
                 {enabledTypes.audio && (
@@ -809,7 +831,6 @@ const DualNBack = () => {
               </div>
             )}
 
-            {/* Color indicator - only if no grid */}
             {enabledTypes.color && !enabledTypes.position && (
               <div className="text-center">
                 <div
@@ -827,7 +848,6 @@ const DualNBack = () => {
               </div>
             )}
 
-            {/* Shape indicator - only if no grid */}
             {enabledTypes.shape && !enabledTypes.position && (
               <div className="text-center">
                 <div
@@ -845,7 +865,6 @@ const DualNBack = () => {
             )}
           </div>
 
-          {/* Response buttons - fixed to bottom */}
           <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
               className={`flex items-center px-4 pb-6 ${
@@ -934,7 +953,6 @@ const DualNBack = () => {
     )
   }
 
-  // Results screen
   if (gameState === "results") {
     const { accuracies, overallAccuracy } = calculateAccuracy()
     const nextLevel = getNextLevel()
