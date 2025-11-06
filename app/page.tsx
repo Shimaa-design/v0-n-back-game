@@ -190,7 +190,7 @@ const DualNBack = () => {
 
     const updated = [...dailyScores, newScore]
     setDailyScores(updated)
-    localStorage.setItem("nback-daily-scores", JSON.JSON.stringify(updated))
+    localStorage.setItem("nback-daily-scores", JSON.stringify(updated))
   }
 
   const getTodayStats = () => {
