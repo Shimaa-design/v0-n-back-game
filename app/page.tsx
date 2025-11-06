@@ -598,7 +598,7 @@ const DualNBack = () => {
             ) : (
               <>
                 <div className="flex items-center gap-3 mb-8 justify-start flex-col">
-                  <h1 className="font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-primary text-3xl">
+                  <h1 className="font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-3xl text-foreground">
                     {"Dual-N-Back"}
                   </h1>
                 </div>
@@ -606,11 +606,11 @@ const DualNBack = () => {
                 {todayStats && (
                   <button
                     onClick={() => setShowProgress(true)}
-                    className="w-full border border-accent/30 rounded-xl p-3 mb-4 hover:bg-accent/30 transition text-left bg-accent text-accent-foreground"
+                    className="w-full rounded-xl p-3 mb-4 hover:bg-accent/30 transition text-left bg-accent text-accent-foreground border-solid border border-border"
                   >
                     <div className="flex items-center justify-between text-sm">
                       <div>
-                        <div className="font-bold text-primary">Today's Progress</div>
+                        <div className="font-bold">Today's Progress</div>
                         <div className="text-primary">
                           {todayStats.sessions} sessions · {todayStats.avgAccuracy}% avg · max {todayStats.maxLevel}
                           -back
