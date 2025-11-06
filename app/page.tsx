@@ -845,7 +845,7 @@ const DualNBack = () => {
           </div>
 
           {/* Response buttons - fixed to bottom */}
-          <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe">
+          <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
               className={`flex items-center px-4 pb-6 ${
                 getEnabledCount() === 2 ? "justify-between" : "justify-center gap-4"
