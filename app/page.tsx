@@ -755,9 +755,9 @@ const DualNBack = () => {
     const gridColor = currentColor || "blue"
     const enabledCount = getEnabledCount()
     const buttonSizeClass =
-      enabledCount <= 2
-        ? "w-28 h-28 min-w-28 min-h-28"
-        : `flex-1 max-w-[75px] aspect-square md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28`
+      enabledCount <= 3
+        ? "w-32 h-32 min-w-32 min-h-32"
+        : `flex-1 max-w-[85px] aspect-square md:flex-none md:w-32 md:h-32 md:min-w-32 md:min-h-32`
 
     return (
       <div className="max-w-[1000px] mx-auto">
@@ -779,7 +779,7 @@ const DualNBack = () => {
             </div>
           </div>
 
-          <div className={`flex-1 ${enabledCount <= 2 ? "flex items-center justify-center" : ""}`}>
+          <div className={`flex-1 ${enabledCount <= 3 ? "flex items-center justify-center" : ""}`}>
             <div className="w-full">
               {enabledTypes.position && (
                 <div className="flex-1 flex items-center justify-center mb-4">
@@ -881,7 +881,7 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {enabledCount <= 2 ? (
+                  {enabledCount <= 3 ? (
                     <span>Position</span>
                   ) : (
                     <>
@@ -902,7 +902,7 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {enabledCount <= 2 ? (
+                  {enabledCount <= 3 ? (
                     <span>Letters</span>
                   ) : (
                     <>
@@ -923,7 +923,7 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {enabledCount <= 2 ? (
+                  {enabledCount <= 3 ? (
                     <span>Color</span>
                   ) : (
                     <>
@@ -944,7 +944,7 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {enabledCount <= 2 ? (
+                  {enabledCount <= 3 ? (
                     <span>Shape</span>
                   ) : (
                     <>
@@ -965,7 +965,7 @@ const DualNBack = () => {
                       : "bg-card hover:bg-muted shadow-lg border border-border"
                   }`}
                 >
-                  {enabledCount <= 2 ? (
+                  {enabledCount <= 3 ? (
                     <span>Numbers</span>
                   ) : (
                     <>
