@@ -475,7 +475,7 @@ const DualNBack = () => {
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex flex-col items-center justify-center text-foreground bg-primary">
-        <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border border-solid border-4 rounded-4xl">
+        <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border rounded-4xl border-0 shadow-xl">
           {/* Info icon in top right */}
           <button
             onClick={() => setShowInstructionsPage(!showInstructionsPage)}
@@ -637,7 +637,7 @@ const DualNBack = () => {
                     : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
                 } mb-0`}
               >
-                Start Training 
+                Start Training
               </button>
             </>
           )}
@@ -726,20 +726,20 @@ const DualNBack = () => {
     const gridColor = currentColor || "blue"
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col pb-40">
+      <div className="min-h-screen text-foreground p-4 flex flex-col pb-40 bg-card">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 relative">
           <button
             onClick={exitGame}
-            className="w-12 h-12 rounded-full bg-card backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border border-border"
+            className="w-12 h-12 rounded-full backdrop-blur-sm hover:bg-muted transition flex items-center justify-center border-none border-0 bg-secondary text-secondary-foreground"
           >
             <X size={24} />
           </button>
-          <div className="bg-card px-4 py-2 rounded-lg backdrop-blur-sm border border-border">
-            <span className="font-bold text-primary">{nLevel}-BACK</span>
+          <div className="px-4 py-2 backdrop-blur-sm border border-border border-none rounded-full text-secondary-foreground bg-secondary md:absolute md:left-1/2 md:-translate-x-1/2">
+            <span className="font-bold">{nLevel}-BACK</span>
           </div>
-          <div className="bg-card px-4 py-2 rounded-lg backdrop-blur-sm border border-border">
-            <span className="font-mono">
+          <div className="px-4 py-2 backdrop-blur-sm border border-border rounded-full border-none bg-muted text-muted-foreground">
+            <span className="font-medium">
               Trial {currentTrial + 1}/{totalTrials}
             </span>
           </div>
@@ -752,7 +752,7 @@ const DualNBack = () => {
               {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((pos) => (
                 <div
                   key={pos}
-                  className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative ${
+                  className={`rounded-xl transition-all duration-200 flex items-center justify-center overflow-hidden relative border-none ${
                     currentPosition === pos ? `shadow-2xl` : "bg-muted border-2 border-border"
                   }`}
                   style={{
@@ -933,11 +933,11 @@ const DualNBack = () => {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
         <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-border">
-          <h2 className="text-3xl font-bold text-center mb-6">Session Complete!</h2>
+          <h2 className="font-bold text-center mb-6 text-2xl">Session Complete!</h2>
 
-          <div className="bg-muted rounded-xl p-4 mb-6">
+          <div className="bg-muted rounded-xl p-4 mb-3">
             <div className="text-center mb-4">
-              <div className="text-5xl font-bold text-primary mb-2">{Math.round(overallAccuracy)}%</div>
+              <div className="font-bold text-primary mb-2 text-4xl">{Math.round(overallAccuracy)}%</div>
               <div className="text-sm text-muted-foreground">Overall Accuracy</div>
             </div>
 
@@ -980,7 +980,7 @@ const DualNBack = () => {
           </div>
 
           <div
-            className={`text-center py-4 rounded-xl mb-6 font-bold text-lg ${
+            className={`text-center rounded-xl font-normal py-3 mb-3 ${
               levelChange === "up"
                 ? "bg-primary/20 text-primary"
                 : levelChange === "down"
@@ -995,9 +995,9 @@ const DualNBack = () => {
 
           <button
             onClick={continueTraining}
-            className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-bold text-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3"
+            className="w-full py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 mb-3 font-bold text-lg"
           >
-            CONTINUE TRAINING
+            {"Next Training"}
           </button>
 
           <button
