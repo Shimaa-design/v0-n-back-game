@@ -474,7 +474,7 @@ const DualNBack = () => {
     const todayStats = getTodayStats()
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-secondary text-foreground p-4 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex flex-col items-center justify-center text-foreground bg-primary">
         <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl relative border-border border-0 border-none">
           {/* Info icon in top right */}
           <button
@@ -587,14 +587,14 @@ const DualNBack = () => {
                   <div className="flex gap-2 items-center">
                     <button
                       onClick={() => setNLevel(Math.max(1, nLevel - 1))}
-                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground"
+                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
                     >
                       <Minus size={20} />
                     </button>
                     <span className="text-lg text-primary font-semibold">{nLevel}-Back</span>
                     <button
                       onClick={() => setNLevel(Math.min(maxNLevel, nLevel + 1))}
-                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground"
+                      className="w-10 h-10 bg-secondary hover:bg-accent transition rounded-full flex items-center justify-center text-secondary-foreground shadow-sm"
                     >
                       <Plus size={20} />
                     </button>
@@ -616,7 +616,7 @@ const DualNBack = () => {
                     <button
                       key={key}
                       onClick={() => toggleType(key)}
-                      className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 rounded-full font-medium text-primary ${
+                      className={`text-lg transition-all transform active:scale-95 px-2 py-1.5 rounded-full font-medium text-primary shadow-sm ${
                         enabledTypes[key]
                           ? "bg-primary text-primary-foreground shadow-lg"
                           : "bg-secondary text-secondary-foreground hover:bg-accent"
@@ -631,7 +631,7 @@ const DualNBack = () => {
               <button
                 onClick={startGame}
                 disabled={enabledCount === 0}
-                className={`w-full py-4 text-xl shadow-lg transition transform rounded-full font-bold ${
+                className={`w-full py-4 text-xl transition transform rounded-full font-bold shadow-none ${
                   enabledCount === 0
                     ? "bg-muted text-muted-foreground cursor-not-allowed"
                     : "bg-primary text-primary-foreground hover:shadow-xl hover:scale-105"
