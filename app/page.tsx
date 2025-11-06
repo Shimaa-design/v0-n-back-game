@@ -475,7 +475,7 @@ const DualNBack = () => {
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-secondary p-4 flex flex-col items-center justify-center text-foreground bg-primary">
-        <div className="max-w-md w-full bg-card backdrop-blur-md rounded-2xl p-6 shadow-2xl relative border-border border-0 border-none">
+        <div className="max-w-md w-full bg-card backdrop-blur-md p-6 shadow-2xl relative border-border border-solid border-4 rounded-4xl">
           {/* Info icon in top right */}
           <button
             onClick={() => setShowInstructionsPage(!showInstructionsPage)}
