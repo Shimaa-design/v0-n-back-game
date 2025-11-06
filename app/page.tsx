@@ -727,7 +727,8 @@ const DualNBack = () => {
   // Playing screen
   if (gameState === "playing") {
     const gridColor = currentColor || "blue"
-    const buttonSizeClass = getEnabledCount() >= 4 ? "w-14 h-14 md:w-28 md:h-28" : "w-16 h-16 md:w-28 md:h-28"
+    const enabledCount = getEnabledCount()
+    const maxButtonSize = enabledCount >= 5 ? "max-w-[64px]" : enabledCount >= 4 ? "max-w-[80px]" : "max-w-[110px]"
 
     return (
       <div className="max-w-[1000px] mx-auto">
@@ -848,13 +849,13 @@ const DualNBack = () => {
           <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-background via-background/95 to-transparent pt-6 pb-safe max-w-[1000px] mx-auto">
             <div
               className={`flex items-center px-4 pb-6 ${
-                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-2 md:gap-4"
+                getEnabledCount() === 2 ? "justify-between" : "justify-center gap-1 md:gap-4"
               }`}
             >
               {enabledTypes.position && (
                 <button
                   onClick={() => handleResponse("position")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.position
                       ? responseCorrectness.position
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -869,7 +870,7 @@ const DualNBack = () => {
               {enabledTypes.audio && (
                 <button
                   onClick={() => handleResponse("audio")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.audio
                       ? responseCorrectness.audio
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -884,7 +885,7 @@ const DualNBack = () => {
               {enabledTypes.color && (
                 <button
                   onClick={() => handleResponse("color")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.color
                       ? responseCorrectness.color
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -899,7 +900,7 @@ const DualNBack = () => {
               {enabledTypes.shape && (
                 <button
                   onClick={() => handleResponse("shape")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.shape
                       ? responseCorrectness.shape
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
@@ -914,7 +915,7 @@ const DualNBack = () => {
               {enabledTypes.number && (
                 <button
                   onClick={() => handleResponse("number")}
-                  className={`${buttonSizeClass} flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center ${
+                  className={`flex-1 ${maxButtonSize} aspect-square flex-shrink-0 rounded-full font-bold text-base transition-all transform active:scale-90 flex items-center justify-center md:flex-none md:w-28 md:h-28 md:min-w-28 md:min-h-28 ${
                     responses.number
                       ? responseCorrectness.number
                         ? "bg-green-500 text-white shadow-xl shadow-green-500/50"
